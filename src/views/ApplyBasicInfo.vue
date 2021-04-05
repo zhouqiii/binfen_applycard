@@ -85,8 +85,9 @@ export default {
     },
     data(){
         return{
+            readDescription:{title:'',desc:''},
             cardPage:'',
-            CardExp:'',
+            CardExp:[],
             thisStyle:'',
             btnChangeEnable:false,
             btnAgree:true,
@@ -139,7 +140,14 @@ export default {
             })
             .then((res) => {
                 this.cardPage = res.data.CardPage
-                this.CardExp = res.data.CardExp
+                Array.prototype.forEach.call(res.data.CardExp, item => {
+                     if(item.id<=1){
+                        this.CardExp.push(item)
+                     }if(item.id==2){
+                         this.readDescription.title = item.dialogTitle
+                         this.readDescription.desc = item.dialogDesc
+                     }
+            }); 
             })
             .catch((err) => {
                 console.log(err);
@@ -202,8 +210,9 @@ export default {
                 DialogMessage,
                 {},
                 {
-                title: "中国银行股份有限公司信用卡领用合约",
-                content: "甲方：中国银行股份有限公司信用卡主卡申请人/主卡持卡人/附属卡申请人/附属卡持卡人（如无特别说明，甲方指上述主体中的全部或任何一方）乙方：中国银行股份有限公司基于甲方知悉、理解并遵守《中国银行股份有限公司信用卡章程》（以下简称“《章程》”）、本合约，甲方自愿向乙方申请使用中国银行股份有限公司信用卡（以下称“信用卡”），就信用卡的申领和使用等相关事宜，甲乙双方签订如下合约：第一条 申领1.甲方保证向乙方提供的所有申请资料真实、完整、准确、合法、有效，其中手机号码应与甲方一一对应，如有因甲方办理附属卡等使用同一手机号的合理情形，甲方应出具相关说明。无论申请成功与否，甲方同意乙方可以保留相关申请资料，无须退还。申请资料须由甲方本人亲自签名确认。甲方同意并授权，乙方有权出于相关信用卡业务（包括但不限于信用卡审批、用卡管理及风险评估与管理、为甲方提供服务）的需要，向个人信用信息基础数据库、公安部全国公民身份证号码查询服务中心、中国银联股份有甲方：中国银行股份有限公司信用卡主卡申请人/主卡持卡人/附属卡申请人/附属卡持卡人（如无特别说明，甲方指上述主体中的全部或任何一方）乙方：中国银行股份有限公司基于甲方知悉、理解并遵守《中国银行股份有限公司信用卡章程》（以下简称“《章程》”）、本合约，甲方自愿向乙方申请使用中国银行股份有限公司信用卡（以下称“信用卡”），就信用卡的申领和使用等相关事宜，甲乙双方签订如下合约：第一条 申领1.甲方保证向乙方提供的所有申请资料真实、完整、准确、合法、有效，其中手机号码应与甲方一一对应，如有因甲方办理附属卡等使用同一手机号的合理情形，甲方应出具相关说明。无论申请成功与否，甲方同意乙方可以保留相关申请资料，无须退还。申请资料须由甲方本人亲自签名确认。甲方同意并授权，乙方有权出于相关信用卡业务（包括但不限于信用卡审批、用卡管理及风险评估与管理、为甲方提供服务）的需要，向个人信用信息基础数据库、公安部全国公民身份证号码查询服务中心、中国银联股份有",
+                title:  this.readDescription.title,
+                content: this.readDescription.desc,
+                classAno:'',
                 }
             );
         },
@@ -215,7 +224,8 @@ export default {
                             {},
                             {
                                 title: item.dialogTitle,
-                                content: item.dialogDesc
+                                content: item.dialogDesc,
+                                classAno:'introduction',
                             }
                         );
                      }
@@ -284,9 +294,7 @@ outline:none;
     font-size: 13px;
     color: #999;
   }
-  .title{
-      font-weight: inherit !important;
-}
+
   .button {
     padding: 0;
     float: right;
@@ -315,5 +323,5 @@ outline:none;
     text-overflow: ellipsis;
 }
 
-
+ 
 </style>

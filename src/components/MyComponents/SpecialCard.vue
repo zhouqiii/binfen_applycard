@@ -6,7 +6,7 @@
                     <slot name="specialTitle"></slot>
                 </p>
             </div>
-             <div class="box_frame-row cartMark">
+             <div class="box_frame-row">
                  <slot name="specialCard">
                  </slot>
                 <div :class="box_frame_next">
@@ -67,6 +67,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.CardBox{
+    display: flex;
+    flex-direction: column;
+}
 .wrap{
   flex-wrap: wrap !important;
   flex-direction:row !important;

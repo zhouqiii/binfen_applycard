@@ -1,8 +1,10 @@
 <template>
   <div class="dialog">
     <div class="dialog_box">
-      <div class="dialog_title" v-show="title">{{ title }}</div>
-      <div class="dialog_content">{{ content }}</div>
+      <div id="dialog_title" v-show="title" :class="classNext">{{ title }}</div>
+      <div class="dialog_content" >
+        <pre>{{ content }}</pre>
+        </div>
       <!-- <div class="dialog_btn_group">
       </div> -->
     </div>
@@ -18,22 +20,37 @@ import SvgIcon from '../SvgIcon.vue';
 export default {
   components: { SvgIcon },
   name: "DialogMessage",
+  props:['classAno'],
   data() {
     return {
       title: "",
       content: "",
+      classNext:''
     };
   },
   methods: {
     dialogHide() {
       this.remove();
     },
+
   },
+  watch:{
+    classAno(){
+      this.classNext=this.classAno
+    }
+  }
   
 };
 </script>
 
 <style lang="less" scoped>
+div  pre{
+        white-space: pre-wrap; /*css-3*/
+	white-space: -moz-pre-wrap; /*Mozilla,since1999*/
+	white-space: -pre-wrap; /*Opera4-6*/
+	white-space: -o-pre-wrap; /*Opera7*/
+	word-wrap: break-word; /*InternetExplorer5.5+*/
+  }
 .warnText{
   color: #F44336;
 }
@@ -54,15 +71,15 @@ export default {
   .flex_center;
   .dialog_box {
     width: 560px;
-    height: 80%;
-    padding-top: 60px;
+    padding: 40px 32px;
     background: #fff;
     border-radius: 10px;
     overflow-y: hidden;
-    .dialog_title {
+    #dialog_title {
       height: 36px;
+      margin-bottom: 32px;
       max-height: 100%;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
       color: #f72539;
       .flex_center;
@@ -70,14 +87,15 @@ export default {
     .dialog_content {
       min-height: 30px;
       // margin-top: 30px;
-      padding: 32px 32px 0 32px;
       overflow-y: auto;
       height: 90%;
       font-size: 14px;
       word-break: break-all;
       display: inline-block;
-
+      width: 100%;
+	    white-space: normal
     }
+    
     .dialog_btn_group {
       height: 90px;
       margin-top: 50px;

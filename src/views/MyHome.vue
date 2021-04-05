@@ -8,10 +8,14 @@
             <svg-icon iconClass="shareBold"></svg-icon>
           </template>
         </common-header>
-        <swiper-card  :images="images"></swiper-card>
-        <hot-card :images="images">
-          <template v-slot:hotTitle>{{hotTitle}}</template>
-        </hot-card>
+        <div class="boxHomeSwip">
+          <swiper-card  :images="imagesSwip"></swiper-card>
+          <div class="boxHomeHot">
+             <hot-card :images="images" :showApply="showApply" :showProgress="showProgressGive">
+                <template v-slot:hotTitle>{{hotTitle}}</template>
+            </hot-card>
+          </div>
+        </div>
         <special-card :cardMsg="cardMsgT">
            <template v-slot:specialTitle>{{specialTitle}}</template>
            <template v-slot:specialCard>
@@ -55,6 +59,7 @@ data(){
     return{
         title:'信用卡全部卡片',
         images:'',
+        imagesSwip:'',
         hotTitle:'畅销热卡',
         specialTitle:'主题特色',
         studyTitle:'留学必备',
@@ -63,7 +68,9 @@ data(){
         mainCard:{},
         cardMsgT:[],
         cardShow:'',
-        travelList:''
+        travelList:'',
+        showApply:true,
+        showProgressGive:false
 
     }
 },
@@ -92,6 +99,7 @@ methods:{
     getHomeDataSucc: function(res) {
         res = res.data
         if(res.ret&&res.data) {
+          this.imagesSwip=res.data.SwipeList
           this.images = res.data.HotList
           this.cardShow = res.data.showList
           this.travelList = res.data.TravelList
@@ -113,6 +121,15 @@ mounted () {
 }
 </script>
 <style lang="less" scoped>
+.boxHomeSwip{
+    margin: 1em;
+    border-bottom: 1px solid #83757569;
+    border-radius: 16px;
+    background: #ffffff;
+    .boxHomeHot{
+      padding: 0 24px;
+    }
+}
 .box_frame{
     border: 1px solid #333333;
     border-radius: 5%;

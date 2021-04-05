@@ -6,16 +6,6 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/Home',
-    name: 'Home',
-    component: () => import("@/views/Home")
-  },
-  {
-    path: '/Page1/:flag',
-    name: 'Page1',
-    component: () => import(/* webpackChunkName: "page" */ '@/views/Page1')
-  },
-  {
     path:"*",
     name:"NotFound",
     component:() => import(/* webpackChunkName: "notFound" */ '@/components/NotFound')
@@ -34,6 +24,26 @@ const routes = [
     path: '/ApplyAnoInfo',
     name: 'ApplyAnoInfo',
     component: () => import(/* webpackChunkName: "applyPage2" */ '@/views/ApplyAnoInfo')
+  },
+  {
+    path: '/ApplyServiceInfo',
+    name: 'ApplyServiceInfo',
+    component: () => import(/* webpackChunkName: "applyPage3" */ '@/views/ApplyServiceInfo')
+  },
+  {
+    path: '/ApplyEnd',
+    name: 'ApplyEnd',
+    component: () => import(/* webpackChunkName: "applyPageEnd" */ '@/views/ApplyEnd')
+  },
+  {
+    path: '/ApprovalList',
+    name: 'ApprovalList',
+    component: () => import(/* webpackChunkName: "progressList" */ '@/views/ApprovalList')
+  },
+  {
+    path: '/QueryProgress',
+    name: 'QueryProgress',
+    component: () => import(/* webpackChunkName: "progress" */ '@/views/QueryProgress')
   },
 ]
 

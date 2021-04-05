@@ -43,6 +43,9 @@ Vue.config.productionTip = false
 //全局引入header
 import CommonHeader from './components/CommonHeader.vue'
 Vue.component('common-header',CommonHeader)
+import HotCard from './components/MyComponents/HotCard.vue'
+Vue.component('hot-card',HotCard)
+
 new Vue({
   router,
   store,

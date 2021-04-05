@@ -30,7 +30,6 @@
                                 is-link
                                 readonly
                                 label="身份证有效期"
-                                placeholder="请选择时间"
                                 @click="show = true"
                             />
                             <van-calendar v-model="show" :min-date="minDate" type="range" @confirm="onConfirmTime" />
@@ -59,7 +58,6 @@
                                 is-link
                                 readonly
                                 label="*教育程度"
-                                placeholder="请选择"
                                 @click="showPickerStudy = true"
                             />
                             <van-popup v-model="showPickerStudy" round position="bottom">
@@ -77,7 +75,6 @@
                                 is-link
                                 readonly
                                 label="*家庭省市"
-                                placeholder="请选择家庭省市"
                                 @click="showCity = true"
                             />
                            <van-popup v-model="showCity" round position="bottom">
@@ -110,7 +107,6 @@
                                 is-link
                                 readonly
                                 label="*行业性质"
-                                placeholder="请选择"
                                 @click="showPickerType = true"
                             />
                             <van-popup v-model="showPickerType" round position="bottom">
@@ -128,7 +124,6 @@
                                 is-link
                                 readonly
                                 label="*职业信息"
-                                placeholder="请选择"
                                 @click="showPickerMsg = true"
                             />
                             <van-popup v-model="showPickerMsg" round position="bottom">
@@ -146,7 +141,6 @@
                                 is-link
                                 readonly
                                 label="*职位或职级"
-                                placeholder="请选择"
                                 @click="showPickerOcupation = true"
                             />
                             <van-popup v-model="showPickerOcupation" round position="bottom">
@@ -164,7 +158,6 @@
                                 is-link
                                 readonly
                                 label="*经济类型"
-                                placeholder="请选择"
                                 @click="showPickerEco = true"
                             />
                             <van-popup v-model="showPickerEco" round position="bottom">
@@ -187,7 +180,6 @@
                                 is-link
                                 readonly
                                 label="*单位省市"
-                                placeholder="请选择单位省市"
                                 @click="showComCity = true"
                             />
                             <van-popup v-model="showComCity" round position="bottom">
@@ -215,7 +207,6 @@
                                 is-link
                                 readonly
                                 label="*公司年限"
-                                placeholder="请选择公司年限"
                                 @click="showComAge = true"
                             />
                             <van-popup v-model="showComAge" round position="bottom">
@@ -233,7 +224,6 @@
                                 is-link
                                 readonly
                                 label="年收入"
-                                placeholder="请选择年收入"
                                 @click="showIncome = true"
                             />
                             <van-popup v-model="showIncome" round position="bottom">
@@ -261,7 +251,6 @@
                                 is-link
                                 readonly
                                 label="*与你的关系"
-                                placeholder="请选择"
                                 @click="showRelation = true"
                             />
                             <van-popup v-model="showRelation" round position="bottom">
@@ -404,7 +393,12 @@ export default {
             this.fieldValue = value[0]+value[1];
         },
         submitMsg(){
-            console.log(1)
+            this.$router.push({
+                name: 'ApplyServiceInfo',
+                params:{
+                    id:this.$route.params.id
+                },
+            })
         },
          getHomeData: function() {
             axios.get('/mock/city.json').then(this.getHomeDataSucc)
@@ -449,6 +443,9 @@ export default {
         padding: 4rem 3% 0 3%;
         .van-cell-group{
             background-color:inherit
+        }
+        .van-field__control{
+            text-align: right;
         }
         .van-cell{
             padding:inherit;
