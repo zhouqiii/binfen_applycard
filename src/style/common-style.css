@@ -1,0 +1,126 @@
+/*
+* @description app common style 
+*
+*/
+@charset "utf-8";
+/*************************** common style start   *******************************************/
+html {
+  font-size: 14px;
+  font-size: 4.266667vw; /* 16px */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #f7f7f7;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-size: inherit;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+/*************************** common style end   *******************************************/
+
+/*************************** popup style start   *******************************************/
+
+.formssi-overlay {
+  /* 遮罩层 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/*************************** popup style end   *******************************************/
+
+/*************************** button style start   *******************************************/
+.formssi-btn {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  text-align: center;
+  height: 88px;
+  line-height: 88px;
+  border-radius: 6px;
+  padding: 0 8px;
+  border: 0 solid transparent;
+  cursor: pointer;
+  box-sizing: border-box;
+  -webkit-transition: opacity .3s;
+  transition: opacity .3s;
+}
+
+.formssi-btn:active {
+  opacity: .6;
+}
+
+.formssi-btn-sm {
+  height: auto;
+  line-height: 1.2;
+  padding: 8px 12px;
+}
+
+.formssi-btn-lg {
+  display: block;
+  width: 100%;
+  padding: 0 0;
+}
+
+.formssi-btn_red {
+  color: #fff;
+  background-color: #f72539;
+  box-shadow: 0 0 9px 5px #ff9199;
+}
+
+.formssi-btn_white {
+  color: #f72539;
+  border: 1px solid #f72539;
+  background-color: #fff;
+}
+
+.formssi-btn_disabled {
+  color: #f4f4f4;
+  background-color: #f7c6cb;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.formssi-btn_disabled:active {
+  opacity: 1;
+}
+
+.formssi-btn_delete {
+  color: #333;
+  border: 1px solid #bcbcbc;
+  background-color: #fff;
+}
+
+/*************************** button style end   *******************************************/

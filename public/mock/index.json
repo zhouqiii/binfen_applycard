@@ -1,0 +1,102 @@
+{
+  "ret": true,
+  "data": {
+    "HotList": [{
+        "id": "1",
+        "imgUrl": "../mock/myimg/card4.png",
+        "title":"中银VISA冬奥信用卡",
+        "des":"副标题，精简文"
+      },{
+        "id": "2",
+        "imgUrl":"../mock/myimg/card4.png",
+        "title":"中银数字信用卡白",
+        "des":"副标题，精简文案"
+      },{
+        "id": "3",
+        "imgUrl": "../mock/myimg/card4.png",
+        "title":"长城银联白金卡",
+        "des":"副标题，精简文案"
+      },{
+        "id": "4",
+        "imgUrl": "../mock/myimg/card4.png",
+        "title":"留学卓越Visa卡",
+        "des":"副标题，精简文案"
+      }],"CardPage": [{
+        "id": "1",
+        "imgUrl": "../mock/myimg/card1.png",
+        "title":"留学卓越Visa卡",
+        "des":"副标题，精简文案"
+      },{
+        "id": "2",
+        "imgUrl":"../mock/myimg/card2.png",
+        "title":"留学卓越Visa卡",
+        "des":"副标题，精简文案"
+      }],
+      "CardExp": [{
+        "id": "0",
+        "title":"权益",
+        "des":"免年费，次年300/年，标准说明区域免年费，次年300/年，标准说明区域",
+        "dialogTitle":"权益说明：",
+        "dialogDesc":"中银数字信用卡是中国银行推出的无实体介质卡片，免去繁琐的交付环节。★2020年12月24日-2021年3月31日，使用中银数字信用卡金卡、中银数字信用卡白金卡、中银数字ETC卡通过微信支付、支付宝、京东支付、唯品会、美团快捷支付消费，每消费人民币1元可累计中国银行信用卡交易积分3积分。每名持卡人每月最多获得5万积分奖励。详见“中国银行信用卡”微信公众号。★尊享银联白金信用卡礼遇，详见云闪付APP权益精选介绍。"
+      },{
+        "id": "1",
+        "title":"年费",
+        "des":"权益说明区域权益说明区域权益说明区域权益说明区域权益说明区域权益说明区域",
+        "dialogTitle":"年费标准：",
+        "dialogDesc":"（1）2021年12月31日前申请，免首年年费，消费12笔免次年年费。（2）我行将在您卡片激活后的首个账单日检查是否收取年费（每年的年费均在此日期进行检查确认是否收取），如果该账单日在卡片申请成功后的一年内，则免首年年费。（3）超出免年费期限，需在下个年费收取日期前消费达标，可免次年年费。（4）信用卡年费标准详见中国银行官网公告。"
+      }],"TravelList": [{
+        "id": "1",
+        "imgUrl": "../mock/myimg/card3.png",
+        "title":"中银VISA冬奥信用卡",
+        "des":"持卡上冰雪多项立"
+      },{
+        "id": "2",
+        "imgUrl":"../mock/myimg/card3.png",
+        "title":"中银数字信用卡白",
+        "des":"副标题，精简文案"
+      }],
+      "SpecialList": [{
+        "id": "1",
+        "imgUrl": "../mock/myimg/cardMain.png",
+        "title":"中银VISA冬奥信用卡",
+        "des":"持卡上冰雪多项立"
+      },{
+        "id": "2",
+        "imgUrl":"../mock/myimg/card3.png",
+        "title":"中银数字信用卡白",
+        "des":"副标题，精简文案"
+      },{
+        "id": "3",
+        "imgUrl": "../mock/myimg/card3.png",
+        "title":"长城银联白金卡",
+        "des":"副标题，精简文案"
+      }],
+      "showList": [{
+        "id": "1",
+        "imgUrl": "../mock/myimg/card3.png",
+        "title":"中银VISA冬奥信用卡",
+        "des":"持卡上冰雪多项立持卡上冰雪多项立"
+      },{
+        "id": "2",
+        "imgUrl":"../mock/myimg/card3.png",
+        "title":"中银数字信用卡白",
+        "des":"副标题，精简文案"
+      },{
+        "id": "3",
+        "imgUrl": "../mock/myimg/card3.png",
+        "title":"长城银联白金卡",
+        "des":"副标题，精简文案"
+      },{
+        "id": "4",
+        "imgUrl": "../mock/myimg/card3.png",
+        "title":"长城银联白金卡",
+        "des":"副标题，精简文案"
+      }],
+      "msgBox":{
+        "title":"同意授权缤纷生活将本人银行卡信息传递给京东",
+        "cancel":"取消",
+        "confirm":"确定"
+      }
+    
+  }
+}

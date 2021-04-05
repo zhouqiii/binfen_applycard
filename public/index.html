@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- 关于meta标签content的值
+    页面宽度等于设备宽度，缩放为一倍，不允许用户进行缩放
+    minimal-ui：IOS7.1中为meta标签新增的属性，让网页在加载时隐藏顶部的地址栏和底部的导航栏
+    viewport-fit=cover为了让适配刘海屏的安全区域的css函数生效
+    -->
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui,viewport-fit=cover">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title><%= webpackConfig.name %></title>
+  <script>
+    (function () {
+      function autoRootFontSize() {
+        document.documentElement.style.fontSize = Math.min(screen.width, document.documentElement
+          .getBoundingClientRect().width) / 750 * 32 + 'px';
+        // 取screen.width和document.documentElement.getBoundingClientRect().width的最小值；
+        // 除以750，乘以32；意思就是相对于750大小的32px;
+        // 即如果屏幕大小变成了375px,那么字体就是16px;也就是根字体fontSize大小和屏幕大小成正比变化！
+      }
+      window.addEventListener('resize', autoRootFontSize);
+      autoRootFontSize();
+    })();
+  </script>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
+</html>
