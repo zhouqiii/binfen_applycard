@@ -23,12 +23,12 @@
                     <div class="ruleForm">
                         <div class="formItem">
                             <van-cell-group>
-                                <van-field v-model="emergencyContact" label="*紧急联系人" placeholder="请输入紧急联系人姓名" />
+                                <van-field v-model="formData.emergencyContact" label="*紧急联系人" placeholder="请输入紧急联系人姓名" />
                             </van-cell-group>
                         </div>
                         <div class="formItem">
                              <van-field
-                                v-model="relationship"
+                                v-model="formData.relationship"
                                 is-link
                                 readonly
                                 label="*与你的关系"
@@ -45,7 +45,7 @@
                         </div>
                         <div class="formItem">
                             <van-cell-group>
-                                <van-field v-model="emergencyConPhone" label="*ta的电话" placeholder="请输入紧急联系人电话" />
+                                <van-field v-model="formData.emergencyConPhone" label="*ta的电话" placeholder="请输入紧急联系人电话" />
                             </van-cell-group>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                     <div class="ruleForm">
                         <div class="formItem">
                              <van-field
-                                v-model="sendWay"
+                                v-model="formData.sendWay"
                                 is-link
                                 readonly
                                 label="*对账单发送方式选择"
@@ -72,7 +72,7 @@
                         </div>
                         <div class="formItem">
                              <van-field
-                                v-model="sendAdress"
+                                v-model="formData.sendAdress"
                                 is-link
                                 readonly
                                 label="*卡函寄送地址"
@@ -101,12 +101,13 @@
                         <p>如果您申请金卡的要求未能审核通过，我们将为您寄送同一品牌的普卡。</p>
                     </div>
                 </div>
-                 <div class="agreeCheck">
-                    <button class="submitBtn"  @click="submitMsg">
+               
+            </div>
+             <div class="agreeCheck">
+                    <button class="submitBtn" :disabled="btnAgree" :style="thisStyle" @click="submitMsg">
                         <span>提交审核</span>
                     </button>
                 </div>
-            </div>
         </div>
     </div>
 </template>
@@ -120,12 +121,16 @@ export default {
             titleCard:'中银数字信用卡白金卡',
             desCard:'副标题，精简文案，突出卖点',
             picture:pic,
-            emergencyContact:'',
-            relationship:'',
-            emergencyConPhone:'',
-            sendWay:'',
-            sendAdress:'',
+            formData:{
+                emergencyContact:'',
+                relationship:'',
+                emergencyConPhone:'',
+                sendWay:'',
+                sendAdress:'',
+            },
             checked: true,
+            btnAgree:true,
+            thisStyle:'',
             showRelation:false,
             showSendWay:false,
             showSendAdress:false,
@@ -137,15 +142,15 @@ export default {
     },
     methods:{
         onConfirmRelation(value){
-            this.relationship = value;
+            this.formData.relationship = value;
             this.showRelation = false;
         },
          onConfirmSendWay(value){
-            this.sendWay = value;
+            this.formData.sendWay = value;
             this.showSendWay = false;
         },
         onConfirmSendAdress(value){
-            this.sendAdress = value;
+            this.formData.sendAdress = value;
             this.showSendAdress = false;
         },
         goBack(){
@@ -159,6 +164,26 @@ export default {
                 },
             })
         },
+    },
+        watch:{
+            formData:{
+                handler(newVal) {
+                    let flag=true
+                    Object.keys(newVal).forEach(item => {
+                        if(newVal[item]==''||newVal[item]==null||newVal[item]==undefined){
+                            flag=false
+                        }
+                    })
+                    if(flag){
+                        this.thisStyle = "background: rgb(165 29 29 / 93%);"
+                        this.btnAgree = false
+                    }else{
+                        this.thisStyle = "background: #33333391"
+                        this.btnAgree = true
+                    }
+                },
+                deep:true
+            }
     }
 }
 </script>

@@ -65,10 +65,8 @@ export default {
             }); 
             this.$router.push({
                 name: 'QueryProgress',
-                params: {
-                        data: getShowData
-                }
             })
+            localStorage.setItem('data',JSON.stringify(getShowData));
         },
     },
     watch:{

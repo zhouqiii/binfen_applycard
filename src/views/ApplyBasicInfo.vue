@@ -24,17 +24,17 @@
                 </el-carousel>
             </div>
             <div style="padding:1% 3%">
-                <div v-for="(item,index) in CardExp" :key="index"  class="box_frame-row">
+                <div v-for="(item,index) in CardExp" :key="index"  class="box_frame-row" style="height:2em">
                     <div class="exper">{{item.title}}</div>
                     <div class="description"><span>{{item.des}}</span></div>
-                    <div @click="showDescription(index)"><svg-icon iconClass="showDec"></svg-icon></div>
+                    <div @click="showDescription(index)" class="btn"><svg-icon iconClass="showDec"></svg-icon></div>
                 </div>
             </div>
             <div>
                 <div class="formBox">
                     <div><p class="titleCard">基本信息</p></div>
                     <div>
-                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="25%" class="demo-ruleForm">
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="30%" class="demo-ruleForm">
                             <el-form-item label="中文姓名" prop="name">
                                 <el-input v-model="ruleForm.name" placeholder="请输入中文姓名" @blur="getPinYin"></el-input>
                             </el-form-item>
@@ -62,7 +62,7 @@
                         <p>
                             <input type="checkbox" name="agree" value="1" id="check" @change="getValue(this)">
                             本人已阅读全部申请材料，充分了解并清楚知晓该信用卡的产品相关信息，愿意遵守
-                            <span style="color:blue" @click="showContract">《中国银行股份有限公司信用卡领用合约》
+                            <span style="color:blue" @click="showContract" class="btn">《中国银行股份有限公司信用卡领用合约》
                             </span>的各项规则。
                         </p>
                     </div>
@@ -217,6 +217,7 @@ export default {
             );
         },
         showDescription(index){
+           
             Array.prototype.forEach.call(this.CardExp, item => {
                      if(item.id==index){
                         createDom(
@@ -238,6 +239,47 @@ export default {
     },
     mounted () {
         this.getHomeData()
+//         const btnNode = document.querySelector('.btn')
+//         const containerNode = document.querySelector('.dialog')
+//         const layerNode = document.querySelector('.dialog_box')
+//         const contentNode = document.querySelector('.dialog_content')
+//         let startY = 0 // 记录开始滑动的坐标，用于判断滑动方向
+//         let status = 0 // 0：未开始，1：已开始，2：滑动中
+//         layerNode.addEventListener('touchstart', e => {
+//             e.preventDefault()
+//         }, false)
+
+//         // 核心部分
+//         contentNode.addEventListener('touchstart', e => {
+//             status = 1
+//             startY = e.targetTouches[0].pageY
+//         }, false)
+//         contentNode.addEventListener('touchmove', e => {
+//         // 判定一次就够了
+//         if (status !== 1) return
+
+//         status = 2
+
+//         let t = e.target
+//         let py = e.targetTouches[0].pageY
+//         let ch = t.clientHeight // 内容可视高度
+//         let sh = t.scrollHeight // 内容滚动高度
+//         let st = t.scrollTop // 当前滚动高度
+
+//         // 已经到头部尽头了还要向上滑动，阻止它
+//         if (st === 0 && startY < py) {
+//             e.preventDefault()
+//         }
+
+//         // 已经到低部尽头了还要向下滑动，阻止它
+//         if ((st === sh - ch) && startY > py) {
+//             e.preventDefault()
+//         }
+//         }, false)
+
+// contentNode.addEventListener('touchend', e => {
+//   status = 0
+// }, false)
     },
     computed:{
     }
@@ -269,7 +311,7 @@ outline:none;
     
 }
 .el-input{
-    width: 65%;
+    width: 60%;
 }
 .el-carousel__item{
     text-align: center;
@@ -281,6 +323,7 @@ outline:none;
 }
 .el-form-item{
     margin-bottom: .5rem;
+    padding: 0 1em;
 }
 /*.el-input结束*/
 .checkNum{
@@ -304,7 +347,6 @@ outline:none;
     display: block;
   }
   .box_frame-row{
-    height: 2em;
     align-items: center;     /* 垂直居中 */
   }
 .exper{

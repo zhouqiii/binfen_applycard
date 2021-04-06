@@ -33,7 +33,7 @@
          <special-card :cardMsg="cardShow" :className="flexWrap">
            <template v-slot:specialTitle>{{studyTitle}}</template>
         </special-card>
-        <travel-card :travelList="travelList">
+        <travel-card :travelList="travelListT">
             <template v-slot:travelTitle>{{travelTitle}}</template>
         </travel-card>
         <div class="bottomText">
@@ -68,7 +68,7 @@ data(){
         mainCard:{},
         cardMsgT:[],
         cardShow:'',
-        travelList:'',
+        travelListT:'',
         showApply:true,
         showProgressGive:false
 
@@ -102,7 +102,7 @@ methods:{
           this.imagesSwip=res.data.SwipeList
           this.images = res.data.HotList
           this.cardShow = res.data.showList
-          this.travelList = res.data.TravelList
+          this.travelListT = res.data.TravelList
           //this.cardMsgT = res.data.SpecialList
           Array.prototype.forEach.call(res.data.SpecialList, item => {
                     if(item.id==1){

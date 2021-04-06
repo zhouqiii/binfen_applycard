@@ -6,7 +6,7 @@
                     <slot name="travelTitle"></slot>
                 </p>
             </div>
-             <div class="box_frame-row cartMark">
+             <div class="box_frame-row">
                 <div class="box_frame_next">
                     <div v-for="(image, index) in travelCard" :key="index" class="nextcard">
                          <div style="margin:.5em .5em;text-align:center">
@@ -32,17 +32,15 @@ export default {
         }
     },
     methods:{
-        getHomeData(){
-            const list=this.travelList
-            Array.prototype.forEach.call(list, item => {
-                     this.travelCard.push(item)
-            }); 
-        }
+        
         },
     watch: {
         travelList(res){
             if(res){
-                this.getHomeData()
+                const list=this.travelList
+                Array.prototype.forEach.call(list, item => {
+                        this.travelCard.push(item)
+                }); 
             }
         },
     },

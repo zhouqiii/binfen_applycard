@@ -10,9 +10,13 @@ Vue.use(Calendar);
 // 引入reset.css
 import "normalize.css"
 import CalendarT from 'vant';
+import Icon from 'vant';
+Icon 
 import 'vant/lib/index.css';
 
 Vue.use(CalendarT);
+
+Vue.use(Icon);
 
 // 引入公共样式
 import "@/style/common-style.less"

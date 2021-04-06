@@ -42,16 +42,28 @@ export default {
             showProgressGive:false,
             iconClass:'',
             showIcon:false,
-            mag:{},
+            mag:'',
+            activeT:'',
             activities: [{
                 content: '审批通过',
                 size: 'large',
+                color:'rgb(102 102 102 / 63%)'
                 }, {
                 content: '物流邮寄中',
                 size: 'large',
+                color:'rgb(102 102 102 / 63%)'
+                },  {
+                content: '签收卡片',
+                size: 'large',
+                color:'rgb(102 102 102 / 63%)'
                 }, {
                 content: '已激活',
                 size: 'large',
+                color:'rgb(102 102 102 / 63%)'
+                }, {
+                content: '已使用',
+                size: 'large',
+                color:'rgb(102 102 102 / 63%)'
                 },]
 
         }
@@ -61,27 +73,29 @@ export default {
             this.$router.go(-1)
         },
         checkData(){
-            let str = JSON.stringify(this.$route.params.data)//把对象转化为字符串（stringify）存放进sessionStorage
-            localStorage.setItem('msg',str)
-            let msgGet=JSON.parse(localStorage.getItem("msg"));
+            let msgGet=this.msg;
             this.images.push(msgGet)
-            console.log(this.images)
             let step=msgGet.line
-            console.log(step)
-            if(step==0){
-                 this.activities[step].type='primary'
-            //    this.activities[0].icon="el-icon-s-custom"
-            }else if(step>=1){
-               // this.activities[step].icon='el-icon-s-custom'
-                for(let i=0;i<=step;i++){
-                    this.activities[i].type='primary'
+           
+            if(step>=0){
+                this.activities[step].color='#fff'
+                this.activities[step].icon="el-icon-s-custom"
+                for(let i=0;i<step;i++){
+                     this.activities[i].color='#000000b3'
                 }
             }
-            
+            //else if(step>=1){
+            //     this.activities[step].icon='el-icon-s-custom'
+            //     this.activities[step].color='#000000b3'
+            //     // for(let i=0;i<=step;i++){
+            //     //     this.activities[i].type='primary'
+            //     // }
+            // }
         }
     },
     mounted(){
-        this.checkData()
+         this.msg = JSON.parse(localStorage.data);
+         this.checkData()
     }
 }
 </script>
@@ -101,8 +115,11 @@ export default {
 .el-timeline-item__node--large{
     height: 20px;
     width: 20px;
+    left:-0.2rem
 }
-.el-timeline-item__node{
+.el-timeline-item__icon {
+    color: #000000b3;
+    font-size: 24px;
 }
 
 </style>
