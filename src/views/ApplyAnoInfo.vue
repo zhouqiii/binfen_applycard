@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="formBox">
+            <van-form class="formBox">
                 <div>
                     <div><p class="titleCard">补充其他信息</p></div>
                     <div class="ruleForm">
@@ -86,13 +86,15 @@
                             </van-popup>
                         </div>
                         <div>
-                            <van-field style="height:4em;line-height:2em"
+                            <van-field style="line-height:2em"
                                 v-model="formData.message"
                                 rows="2"
                                 autosize
                                 label="*家庭地址"
                                 type="textarea"
-                                placeholder="请输入详细地址"
+                                placeholder="请输入家庭住址"
+                                @blur="checkAdress" 
+                                :error-message="errMsg.adress"   
                             />
                         </div>
                     </div>
@@ -169,9 +171,12 @@
                             </van-popup>
                         </div>
                         <div class="formItem">
-                            <van-cell-group>
-                                <van-field v-model="formData.companyName" label="*单位名称" placeholder="请输入单位名称" />
-                            </van-cell-group>
+                            <van-field v-model="formData.companyName" 
+                                label="*单位名称" 
+                                placeholder="请输入单位名称" 
+                                @blur="checkComA" 
+                                :error-message="errMsg.company"     
+                            />
                         </div>
                         <div class="formItem">
                            <van-field
@@ -191,14 +196,20 @@
                             </van-popup>
                         </div>
                         <div class="formItem">
-                            <van-cell-group>
-                                <van-field v-model="formData.detailComAdr" label="*详细地址" placeholder="请输入公司详细地址" />
-                            </van-cell-group>
+                            <van-field v-model="formData.detailComAdr" 
+                                label="*详细地址" 
+                                placeholder="请输入公司详细地址"
+                                 @blur="checkComAdress" 
+                                :error-message="errMsg.comAdress"
+                            />
                         </div>
                          <div class="formItem">
-                            <van-cell-group>
-                                <van-field v-model="formData.companyNum" label="*公司电话" placeholder="请输入公司电话" />
-                            </van-cell-group>
+                            <van-field v-model="formData.companyNum" 
+                                label="*公司电话"
+                                placeholder="请输入公司电话"
+                                @blur="checkComPhone" 
+                                :error-message="errMsg.comMobilePhone"
+                            />
                         </div>
                         <div class="formItem">
                            <van-field
@@ -240,9 +251,12 @@
                     <div><p class="titleCard">紧急联系人</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
-                            <van-cell-group>
-                                <van-field v-model="formData.emergencyContact" label="*紧急联系人" placeholder="请输入紧急联系人姓名" />
-                            </van-cell-group>
+                            <van-field v-model="formData.emergencyContact" 
+                                label="*紧急联系人" 
+                                placeholder="请输入紧急联系人姓名" 
+                                @blur="checkContact" 
+                                :error-message="errMsg.name"
+                            />
                         </div>
                         <div class="formItem">
                              <van-field
@@ -262,13 +276,16 @@
                             </van-popup>
                         </div>
                         <div class="formItem">
-                            <van-cell-group>
-                                <van-field v-model="formData.emergencyConPhone" label="*ta的电话" placeholder="请输入紧急联系人电话" />
-                            </van-cell-group>
+                            <van-field v-model="formData.emergencyConPhone" 
+                                label="*ta的电话" 
+                                placeholder="请输入紧急联系人电话" 
+                                @blur="checkContactPhone" 
+                                :error-message="errMsg.mobilePhone"
+                            />
                         </div>
                     </div>
                 </div>
-            </div>
+            </van-form>
              <div class="agreeCheck">
                 <button class="submitBtn" :disabled="btnAgree" :style="thisStyle" @click="submitMsg">
                     <span>提交下一步</span>
@@ -280,10 +297,14 @@
 <script>
 import pic from '@/assets/img/card3.png'
 import SvgIcon from '../components/SvgIcon.vue';
+import { Form } from 'vant';
 import axios from 'axios'
 export default {
   components: { SvgIcon},
     name:'ApplyAnoInfo',
+    components: {
+        [Form.name]: Form,
+    },
     data(){
         return{
             formData:{
@@ -306,6 +327,35 @@ export default {
                 ocupation:'',
                 economicType:'',
             },
+             flag:{
+                date:false,//身份证
+                marry: false,   //婚姻  
+                study:false,//教育
+                fieldValue: false,//家庭省市
+                message:false,//家庭地址
+                enterpriseType:false,//行业性质
+                relationship:false,//紧急与你的关系
+                income:false,//收入
+                emergencyConPhone:false,//紧急联系方式
+                emergencyContact:false,//紧急联系人
+                companyName:false,//公司名称
+                companyAdr:false,//公司地址
+                detailComAdr:false,//详细地址
+                companyNum:false,//公司电话
+                companyAge:false,//公司年限
+                enterpriseMsg:false,//职业信息
+                ocupation:false,//职位
+                economicType:false,//收入类型
+            },
+            errMsg:{
+                adress:'',
+                company:'',
+                comAdress:'',
+                comMobilePhone:'',
+                mobilePhone: '',
+                name:'',
+            },
+            fontColor:'',
             btnAgree:true,
             thisStyle:'',
             minDate: new Date(2010, 0, 1),
@@ -349,53 +399,163 @@ export default {
             const [start, end] = date;
             this.show = false;
             this.formData.date = `${this.formatDate(start)} - ${this.formatDate(end)}`;
+            this.flag.date=true
+
         },
         onConfirmMarry(value) {
             this.formData.marry = value;
             this.showPickerMarry = false;
+            this.flag.marry=true
         },
          onConfirmStudy(value) {
             this.formData.study = value;
             this.showPickerStudy = false;
+            this.flag.study=true
         },
          onConfirmType(value) {
             this.formData.enterpriseType = value;
             this.showPickerType = false;
+            this.flag.enterpriseType=true
         },
         onConfirmMsg(value) {
             this.formData.enterpriseMsg = value;
             this.showPickerMsg = false;
+            this.flag.enterpriseMsg=true
         },
         onConfirmOcupation(value){
             this.formData.ocupation = value;
             this.showPickerOcupation = false;
+            this.flag.ocupation=true
         },
         onConfirmEco(value){
             this.formData.economicType = value;
             this.showPickerEco = false;
+            this.flag.economicType=true
         },
         onConfirmCompany(value){
             this.formData.companyAdr = value[0]+value[1];;
             this.showComCity = false;
+            this.flag.companyAdr=true
         },
         onConfirmComAge(value){
             this.formData.companyAge = value;
             this.showComAge = false;
+            this.flag.companyAge=true
         },
         onConfirmIncome(value){
             this.formData.income = value;
             this.showIncome = false;
+            this.flag.income=true
         },
         onConfirmRelation(value){
             this.formData.relationship = value;
             this.showRelation = false;
+            this.flag.relationship=true
         },
         onFinish(value) {
             this.showCity = false;
             // console.log(value)
             this.formData.fieldValue = value[0]+value[1];
+            this.flag.fieldValue=true
+        },
+        checkComA(){
+             if (!this.formData.companyName) {
+                this.errMsg.company = '请填写名称！'
+                this.flag.companyName=false
+                return false
+            }
+            else {
+                this.errMsg.company = ''
+                this.flag.companyName=true
+                return true
+            }
+        },
+        checkAdress(){
+             if (!this.formData.message) {
+                this.errMsg.adress = '请填写地址！'
+                this.flag.message=false
+                return false
+            }
+            else {
+                this.errMsg.adress = ''
+                this.flag.message=true
+                return true
+            }
+        },
+         checkComAdress(){
+             if (!this.formData.detailComAdr) {
+                this.errMsg.comAdress = '请填写地址！'
+                this.flag.detailComAdr=false
+                return false
+            }
+            else {
+                this.errMsg.comAdress = ''
+                 this.flag.detailComAdr=true
+                return true
+            }
+        },
+        checkComPhone(){
+            let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
+            if (!this.formData.companyNum) {
+                this.errMsg.comMobilePhone = '请填写电话！'
+                 this.flag.companyNum=false
+                return false
+            } else if (!re.test(this.formData.companyNum)) {
+                this.errMsg.comMobilePhone = '格式错误！'
+                this.flag.companyNum=false
+                return false
+            }
+            else {
+                this.errMsg.comMobilePhone = ' '
+                this.flag.companyNum=true
+                return true
+            }
+        },
+        checkContact(){
+             const chinese = new RegExp("[\u4E00-\u9FA5]+");//判断字符串是否为汉字
+              if (!this.formData.emergencyContact) {
+                this.errMsg.name = '请填写姓名！'
+                this.flag.emergencyContact=false
+                return false
+            } else if (!chinese.test(this.formData.emergencyContact)) {
+                this.errMsg.name = '格式错误！'
+                this.flag.emergencyContact=false
+                return false
+            }
+            else {
+                this.errMsg.name = ' '
+                this.flag.emergencyContact=true
+                return true
+            }
+            
+        },
+        checkContactPhone(){
+            let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
+            if (!this.formData.emergencyConPhone) {
+                this.errMsg.mobilePhone = '请填写电话！'
+                this.flag.emergencyConPhone=false
+                return false
+            } else if (!re.test(this.formData.emergencyConPhone)) {
+                this.errMsg.mobilePhone = '格式错误！'
+                 this.flag.emergencyConPhone=false
+                return false
+            }
+            else {
+                this.errMsg.mobilePhone = ' '
+                this.flag.emergencyConPhone=true
+                return true
+            }
         },
         submitMsg(){
+            const objOld=this.formData
+            let objNew={}
+            Object.keys(objOld).forEach(item =>{
+                let data=objOld[item]
+                data=data.toString()
+                data = data.split(" ").join("");
+                objNew[item]=data
+            })
+            sessionStorage.setItem('otherData',JSON.stringify(objNew))
             this.$router.push({
                 name: 'ApplyServiceInfo',
                 params:{
@@ -421,26 +581,11 @@ export default {
             this.getHomeData()
         },
     watch:{
-        formData:{
+        flag: {
             handler(newVal) {
-                // if(newVal.message==''||newVal.message==undefined||newVal.message==null){
-                //     alert("请输入详细地址")
-                // }else if(newVal.companyName==''||newVal.companyName==undefined||newVal.companyName==null){
-                //     alert('请输入单位名称')
-                // }else if(newVal.detailComAdr==''||newVal.detailComAdr==undefined||newVal.detailComAdr==null){
-                //     alert('请输入公司地址')
-                // }else if(newVal.companyNum==''||newVal.companyNum==undefined||newVal.companyNum==null){
-                //     alert('请输入公司电话')
-                // }else if(newVal.emergencyContact==''||newVal.emergencyContact==undefined||newVal.emergencyContact==null){
-                //     alert('请输入紧急联系人')
-                // }else if(newVal.emergencyConPhone==''||newVal.emergencyConPhone==undefined||newVal.emergencyConPhone==null){
-                //     alert('请输入紧急联系人电话')
-                // }else{
-
-                // }
                 let flag=true
                 Object.keys(newVal).forEach(item => {
-                    if(newVal[item]==''||newVal[item]==null||newVal[item]==undefined){
+                    if(newVal[item]==false){
                         flag=false
                     }
                 })
@@ -451,8 +596,8 @@ export default {
                     this.thisStyle = "background: #33333391"
                     this.btnAgree = true
                 }
-            },
-            deep:true
+                },
+            deep:true,
         }
     }
 }
@@ -479,21 +624,19 @@ export default {
     }
     .formBox{
         padding: 4rem 3% 0 3%;
-        .van-cell-group{
-            background-color:inherit
-        }
         .van-field__control{
-            text-align: right;
+            text-align: initial;
         }
-        .van-cell{
-            padding:inherit;
-            line-height: inherit;
-            background-color:inherit
-           
+        .van-field__label{
+            width: 6em;
         }
-        .van-cell__right-icon{
-            height: 2.5rem;
-            line-height: 2.5rem;
+        .van-field__value{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .van-field__body{
+                width: 60%;
+            }
         }
     }
 }

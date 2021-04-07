@@ -30,6 +30,11 @@ export default {
   },
   methods: {
     dialogHide() {
+      // let body = document.body;
+      // body.style.position = '';
+      // let top = body.style.top;
+      // document.body.scrollTop = document.documentElement.scrollTop = -parseInt(top);
+      // body.style.top = '';
       this.remove();
     },
 

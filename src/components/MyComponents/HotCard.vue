@@ -52,7 +52,7 @@ export default {
              this.$router.push({
                 name: 'ApplyBasicInfo',
                 params: {
-                        id: id
+                        id
                 }
             })
         },

@@ -95,7 +95,7 @@ methods:{
 },
     getHomeData: function() {
         axios.get('/mock/index.json').then(this.getHomeDataSucc)
-    },
+    },////////
     getHomeDataSucc: function(res) {
         res = res.data
         if(res.ret&&res.data) {

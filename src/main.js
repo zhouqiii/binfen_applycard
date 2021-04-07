@@ -5,23 +5,15 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import Calendar from 'vue-mobile-calendar'
-Vue.use(Calendar);
+Vue.use(ElementUI);
 // 引入reset.css
 import "normalize.css"
-import CalendarT from 'vant';
 import Icon from 'vant';
-Icon 
 import 'vant/lib/index.css';
-
-Vue.use(CalendarT);
-
 Vue.use(Icon);
-
 // 引入公共样式
 import "@/style/common-style.less"
 import  "@/style/common-style.css" 
-import "@/style/common-box.less"
 // 引入判断操作系统及app版本的函数并且添加到prototype上
 import { APPSYS } from "@/utils/commonFn";
 Vue.prototype.APPSYS = APPSYS;
@@ -42,7 +34,6 @@ import "@/assets/icons"
 // import Vconsole from 'vconsole'
 // const vConsole = new Vconsole()
 // Vue.use(vConsole)
-Vue.use(ElementUI);
 Vue.config.productionTip = false
 //全局引入header
 import CommonHeader from './components/CommonHeader.vue'
