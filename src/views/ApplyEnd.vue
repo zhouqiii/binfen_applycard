@@ -62,6 +62,8 @@ export default {
         getHomeData: function() {
             axios.get('/mock/index.json').then(this.getHomeDataSucc)
         },
+        //在这里应该对申请的信息提交状态判断
+        //如果信息提交成功，那么返回申请成功的样式，否则申请失败的样式
         getHomeDataTest(){
             this.msgIcon = true
             this.applyTitle = '信用卡申请成功'
@@ -74,6 +76,7 @@ export default {
           
         }
     },
+    //返回信用卡申请首页
         goToHome(){
             this.$router.push({
                 name: 'MyHome',
@@ -82,6 +85,7 @@ export default {
                 },
             })   
         },
+        //返回该用户申请列表
         goToList(){
             this.$router.push({
                 name: 'ApprovalList',
@@ -133,7 +137,7 @@ export default {
             .backBtn{
                 height: 2.2em;
                 width: 6em;
-                background: rgb(211, 202, 202);
+                background: #c9c7c7ad;
                 border-radius: 2em;
                 line-height: 2.2em;
             }

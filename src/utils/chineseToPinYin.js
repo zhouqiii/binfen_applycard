@@ -1,6 +1,7 @@
 
 import { pinyin } from './pinYin.js';
 export default {
+    //把中文转成拼音
     chineseToPinYin: function (l1) {
         var l2 = l1.length;
         var I1 = '';
@@ -28,6 +29,7 @@ export default {
         }
         return false;
     },
+    //把汉字转成拼音首字母
     ucfirst: function (l1) {
         if (l1.length > 0) {
             var first = l1.substr(0, 1).toUpperCase();

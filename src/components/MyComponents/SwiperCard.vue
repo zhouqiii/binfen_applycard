@@ -30,6 +30,9 @@ export default {
 </script>
 
 <style scoped>
+.swiper{
+    margin-bottom: .5em;
+}
 .van-swipe-item{
     text-align: center;
 }

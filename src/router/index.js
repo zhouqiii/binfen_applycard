@@ -45,6 +45,11 @@ const routes = [
     name: 'QueryProgress',
     component: () => import(/* webpackChunkName: "progress" */ '@/views/QueryProgress')
   },
+  {
+    path: '/AgreementDescription',
+    name: 'AgreementDescription',
+    component: () => import(/* webpackChunkName: "agreement" */ '@/views/AgreementDescription')
+  },
 ]
 
 const router = new VueRouter({

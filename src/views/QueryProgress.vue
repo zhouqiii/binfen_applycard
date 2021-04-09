@@ -44,7 +44,7 @@ export default {
             showIcon:false,
             mag:'',
             activeT:'',
-            activities: [{
+            activities: [{//这里应该定义所有的审批状态，然后通过这张卡的状态改变其步骤样式
                 content: '审批通过',
                 size: 'large',
                 color:'rgb(102 102 102 / 63%)'
@@ -75,8 +75,7 @@ export default {
         checkData(){
             let msgGet=this.msg;
             this.images.push(msgGet)
-            let step=msgGet.line
-           
+            let step=msgGet.line//这里line是申请状态字段之后可以改成后台传过来的，比如约定0—审批通过，1-邮寄中，。。。
             if(step>=0){
                 this.activities[step].color='#fff'
                 this.activities[step].icon="el-icon-s-custom"
@@ -84,17 +83,10 @@ export default {
                      this.activities[i].color='#000000b3'
                 }
             }
-            //else if(step>=1){
-            //     this.activities[step].icon='el-icon-s-custom'
-            //     this.activities[step].color='#000000b3'
-            //     // for(let i=0;i<=step;i++){
-            //     //     this.activities[i].type='primary'
-            //     // }
-            // }
         }
     },
     mounted(){
-         this.msg = JSON.parse(localStorage.data);
+         this.msg = JSON.parse(sessionStorage.data);//在页面渲染时，把申请列表里存的对应卡信息取出，这样在进度查询时可以直接展示对应的哪一张卡
          this.checkData()
     }
 }

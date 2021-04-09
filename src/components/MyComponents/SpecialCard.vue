@@ -6,7 +6,7 @@
                     <slot name="specialTitle"></slot>
                 </p>
             </div>
-             <div class="box_frame-row">
+             <div class="box_frame-row" :class="boxHeight">
                  <slot name="specialCard">
                  </slot>
                 <div :class="box_frame_next">
@@ -27,7 +27,7 @@
 <script>
 export default {
     name:'SpecialCard',
-    props:['cardMsg','cardShow','className'],
+    props:['cardMsg','cardShow','className','boxClassName'],
     data(){
         return{
             mainCard:{},
@@ -55,13 +55,21 @@ export default {
         }
     },
     computed:{
+        //这两个样式是为了在主题热卡中解决组件复用时样式bug
          box_frame_next(){
                 if(this.className){
                     return `box_frame_next ${this.className}`
                 }else{
                     return `box_frame_next`
                 }
+        },
+        boxHeight(){
+            if(this.boxClassName){
+                return `${this.boxClassName}`
+            }else{
+                return ``
             }
+        }
     }
 }
 </script>
@@ -83,8 +91,8 @@ export default {
 .box_frame_next{
     width: 45%;
     display: flex;
-    flex-direction:column;
     justify-content: space-between;
+    flex-direction:column;
     .nextcard{
         border: 1px solid #333333;
         border-radius: 5%;
@@ -95,6 +103,16 @@ export default {
             margin-top: 0%;
         }
     }
+    .active{
+        // margin-top: 2%;
+    }
 }
+.boxHeight{
+    height: 12rem;
+    .giveHeight{
+        height: 100%;
+    }
+}
+
 
 </style>

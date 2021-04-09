@@ -19,12 +19,10 @@
             </div>
             <van-form class="formBox">
                 <div>
+                    <!--补充其他信息-->
                     <div><p class="titleCard">补充其他信息</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
-                            <!-- <span>身份证有效期</span>
-                            <svg-icon iconClass="showDec" v-if="showIcon1"  @click="show = true"></svg-icon>
-                            <span @click="show = true">{{date}}</span> -->
                              <van-field
                                 v-model="formData.date"
                                 is-link
@@ -86,10 +84,9 @@
                             </van-popup>
                         </div>
                         <div>
-                            <van-field style="line-height:2em"
+                            <van-field class="textAreaDiv"
                                 v-model="formData.message"
-                                rows="2"
-                                autosize
+                                rows="3"
                                 label="*家庭地址"
                                 type="textarea"
                                 placeholder="请输入家庭住址"
@@ -100,6 +97,7 @@
                     </div>
                 </div>
                 <div>
+                    <!--补充职业信息-->
                     <div><p class="titleCard">职业信息</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
@@ -248,6 +246,7 @@
                     </div>
                 </div>
                 <div>
+                    <!--补充紧急联系人-->
                     <div><p class="titleCard">紧急联系人</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
@@ -286,7 +285,7 @@
                     </div>
                 </div>
             </van-form>
-             <div class="agreeCheck">
+             <div class="agreeCheck " >
                 <button class="submitBtn" :disabled="btnAgree" :style="thisStyle" @click="submitMsg">
                     <span>提交下一步</span>
                 </button>
@@ -392,9 +391,10 @@ export default {
         }
     },
     methods:{
-        formatDate(date) {
-        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+        formatDate(date) {//格式化身份张有效期时间为2019/05/04的格式
+            return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         },
+        //身份证有效期时间确定按钮
         onConfirmTime(date) {
             const [start, end] = date;
             this.show = false;
@@ -402,62 +402,74 @@ export default {
             this.flag.date=true
 
         },
+        //婚姻状况确定按钮
         onConfirmMarry(value) {
             this.formData.marry = value;
             this.showPickerMarry = false;
             this.flag.marry=true
         },
+        //学历确定按钮
          onConfirmStudy(value) {
             this.formData.study = value;
             this.showPickerStudy = false;
             this.flag.study=true
         },
+        //行业性质确定按钮
          onConfirmType(value) {
             this.formData.enterpriseType = value;
             this.showPickerType = false;
             this.flag.enterpriseType=true
         },
+        //职业信息确定按钮
         onConfirmMsg(value) {
             this.formData.enterpriseMsg = value;
             this.showPickerMsg = false;
             this.flag.enterpriseMsg=true
         },
+        //职位确定按钮
         onConfirmOcupation(value){
             this.formData.ocupation = value;
             this.showPickerOcupation = false;
             this.flag.ocupation=true
         },
+        //经济类型确定按钮
         onConfirmEco(value){
             this.formData.economicType = value;
             this.showPickerEco = false;
             this.flag.economicType=true
         },
+        //公司省市确定按钮
         onConfirmCompany(value){
-            this.formData.companyAdr = value[0]+value[1];;
+            this.formData.companyAdr = value[0]+value[1];//省市格式化为北京市东城区 安徽省淮北市的格式
             this.showComCity = false;
             this.flag.companyAdr=true
         },
+        //公司年限确定按钮
         onConfirmComAge(value){
             this.formData.companyAge = value;
             this.showComAge = false;
             this.flag.companyAge=true
         },
+        //收入确定按钮
         onConfirmIncome(value){
             this.formData.income = value;
             this.showIncome = false;
             this.flag.income=true
         },
+        //与紧急联系人的关系确定按钮
         onConfirmRelation(value){
             this.formData.relationship = value;
             this.showRelation = false;
             this.flag.relationship=true
         },
+        //家庭省市确定按钮
         onFinish(value) {
             this.showCity = false;
             // console.log(value)
-            this.formData.fieldValue = value[0]+value[1];
+            this.formData.fieldValue = value[0]+value[1];//省市格式化为北京市东城区 安徽省淮北市的格式
             this.flag.fieldValue=true
         },
+        //公司名称校验
         checkComA(){
              if (!this.formData.companyName) {
                 this.errMsg.company = '请填写名称！'
@@ -470,6 +482,7 @@ export default {
                 return true
             }
         },
+        //家庭住址
         checkAdress(){
              if (!this.formData.message) {
                 this.errMsg.adress = '请填写地址！'
@@ -482,6 +495,7 @@ export default {
                 return true
             }
         },
+        //公司地址校验
          checkComAdress(){
              if (!this.formData.detailComAdr) {
                 this.errMsg.comAdress = '请填写地址！'
@@ -494,6 +508,7 @@ export default {
                 return true
             }
         },
+        //公司电话校验
         checkComPhone(){
             let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
             if (!this.formData.companyNum) {
@@ -511,13 +526,14 @@ export default {
                 return true
             }
         },
+        //紧急联系人姓名失焦校验
         checkContact(){
-             const chinese = new RegExp("[\u4E00-\u9FA5]+");//判断字符串是否为汉字
+             const chinese = new RegExp("[\u4E00-\u9FA5]+");
               if (!this.formData.emergencyContact) {
                 this.errMsg.name = '请填写姓名！'
                 this.flag.emergencyContact=false
                 return false
-            } else if (!chinese.test(this.formData.emergencyContact)) {
+            } else if (!chinese.test(this.formData.emergencyContact)) {//判断字符串是否为汉字
                 this.errMsg.name = '格式错误！'
                 this.flag.emergencyContact=false
                 return false
@@ -529,6 +545,7 @@ export default {
             }
             
         },
+        //紧急联系人电话失焦校验
         checkContactPhone(){
             let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
             if (!this.formData.emergencyConPhone) {
@@ -546,16 +563,17 @@ export default {
                 return true
             }
         },
+         //同意协议提交下一步，对每个输入信息去空格键，然后缓存基本信息
         submitMsg(){
             const objOld=this.formData
             let objNew={}
             Object.keys(objOld).forEach(item =>{
                 let data=objOld[item]
                 data=data.toString()
-                data = data.split(" ").join("");
+                data = data.split(" ").join("");//去空格键
                 objNew[item]=data
             })
-            sessionStorage.setItem('otherData',JSON.stringify(objNew))
+            sessionStorage.setItem('otherData',JSON.stringify(objNew))//转成字符串缓存
             this.$router.push({
                 name: 'ApplyServiceInfo',
                 params:{
@@ -566,6 +584,7 @@ export default {
          getHomeData: function() {
             axios.get('/mock/city.json').then(this.getHomeDataSucc)
         },
+        //数据赋值
         getHomeDataSucc: function(res) {
             res = res.data
             if(res.ret&&res.data) {
@@ -581,6 +600,9 @@ export default {
             this.getHomeData()
         },
     watch:{
+        //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
+        //一个输入框校验正确，其对应的flag属性改为true，
+        //所有的输入框值校验正确，那么flag所有属性为true，此时可以点击同意按钮
         flag: {
             handler(newVal) {
                 let flag=true
@@ -628,14 +650,26 @@ export default {
             text-align: initial;
         }
         .van-field__label{
-            width: 6em;
+            width: 6.5em;
         }
         .van-field__value{
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             .van-field__body{
-                width: 60%;
+                width: 65%;
+                textarea{
+                    height: 4.5em;
+                    margin-top:2em;
+                    line-height: 1.5em;
+                    overflow-y: auto;
+                }
+            }
+        }
+        .textAreaDiv{
+            .van-field__body{
+                overflow-y: hidden;
+                width: 68% !important;
             }
         }
     }

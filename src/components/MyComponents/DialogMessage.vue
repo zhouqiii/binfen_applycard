@@ -1,12 +1,14 @@
 <template>
   <div class="dialog">
     <div class="dialog_box">
-      <div id="dialog_title" v-show="title" :class="classNext">{{ title }}</div>
+      <div id="dialog_title"  :class="classNext">{{ title }}</div>
       <div class="dialog_content" >
-        <pre>{{ content }}</pre>
+        <div><pre>{{ content }}</pre></div>
+        <div v-if="showBtn" class="dialog_btn flex_evenly">
+          <div class="applyBtn cancelbtn" @click="backToHome">残忍拒绝</div>
+          <div class="applyBtn comfirmbtn" @click="remainApply">继续申请</div>
         </div>
-      <!-- <div class="dialog_btn_group">
-      </div> -->
+      </div>
     </div>
     <div class="dialog_icon" @click="dialogHide">
       <svg-icon iconClass="cancelDialog"></svg-icon>
@@ -17,31 +19,36 @@
 
 <script>
 import SvgIcon from '../SvgIcon.vue';
+import router from "../../router/index.js"
 export default {
   components: { SvgIcon },
   name: "DialogMessage",
-  props:['classAno'],
+  props:['classAno','show'],
   data() {
     return {
       title: "",
       content: "",
-      classNext:''
+      classNext:'',
+      showBtn:false
     };
   },
   methods: {
     dialogHide() {
-      // let body = document.body;
-      // body.style.position = '';
-      // let top = body.style.top;
-      // document.body.scrollTop = document.documentElement.scrollTop = -parseInt(top);
-      // body.style.top = '';
       this.remove();
     },
+    backToHome(){
+      router.push({name: 'MyHome',})
+      this.remove();
+    },
+    remainApply(){
+      this.remove();
+    }
 
   },
   watch:{
     classAno(){
       this.classNext=this.classAno
+      this.showBtn=this.show
     }
   }
   
@@ -50,11 +57,13 @@ export default {
 
 <style lang="less" scoped>
 div  pre{
-        white-space: pre-wrap; /*css-3*/
+  white-space: pre-wrap; /*css-3*/
 	white-space: -moz-pre-wrap; /*Mozilla,since1999*/
 	white-space: -pre-wrap; /*Opera4-6*/
 	white-space: -o-pre-wrap; /*Opera7*/
 	word-wrap: break-word; /*InternetExplorer5.5+*/
+  line-height: 1.5em;
+  font-family: inherit;
   }
 .warnText{
   color: #F44336;
@@ -82,7 +91,7 @@ div  pre{
     overflow-y: hidden;
     #dialog_title {
       height: 36px;
-      margin-bottom: 32px;
+      // margin-bottom: px;
       max-height: 100%;
       font-size: 14px;
       font-weight: bold;
@@ -98,7 +107,25 @@ div  pre{
       word-break: break-all;
       display: inline-block;
       width: 100%;
-	    white-space: normal
+	    white-space: normal;
+      .dialog_btn{
+        height: 75px;
+        line-height: 75px;
+        margin-top:2em;
+        .applyBtn{
+          width: 35%;
+          text-align: center;
+          border-radius: 20px;
+        }
+        .cancelbtn{
+            background: #c9c7c7ad;
+            color: inherit;
+        }
+        .comfirmbtn{
+          background: #0c0808a1;
+          color: #fff;
+        }
+      }
     }
     
     .dialog_btn_group {

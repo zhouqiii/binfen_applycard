@@ -8,15 +8,19 @@
             <svg-icon iconClass="shareBold"></svg-icon>
           </template>
         </common-header>
+
         <div class="boxHomeSwip">
+          <!--轮播图-->
           <swiper-card  :images="imagesSwip"></swiper-card>
+          <!--畅销热卡-->
           <div class="boxHomeHot">
              <hot-card :images="images" :showApply="showApply" :showProgress="showProgressGive">
                 <template v-slot:hotTitle>{{hotTitle}}</template>
             </hot-card>
           </div>
         </div>
-        <special-card :cardMsg="cardMsgT">
+        <!--主题卡-->
+        <special-card :cardMsg="cardMsgT" className="giveHeight" boxClassName="boxHeight">
            <template v-slot:specialTitle>{{specialTitle}}</template>
            <template v-slot:specialCard>
               <div class="box_frame">
@@ -30,9 +34,11 @@
               </div>
            </template>
         </special-card>
+        <!--留学卡-->
          <special-card :cardMsg="cardShow" :className="flexWrap">
            <template v-slot:specialTitle>{{studyTitle}}</template>
         </special-card>
+        <!--旅游卡-->
         <travel-card :travelList="travelListT">
             <template v-slot:travelTitle>{{travelTitle}}</template>
         </travel-card>
@@ -75,14 +81,22 @@ data(){
     }
 },
 methods:{
+  //加载所有信用卡信息，与数据对应
     sendMeg(){
-       this.requestAxios({
-        url: "http://i.baidu.com/calendars/calendars/listInfo",
+        // let proxy = {
+        //     host: "192.168.50.1", //代理服务器地址
+        //     port: 8888,//端口
+        //     auth: { // auth认证信息，阿布云那边有，squid 的话不需要
+        //         username: '',password: ''
+        //     }
+        // };
+      this.requestAxios({
+        url: "http://192.168.50.1:8888/cardlist",
+        // proxy:proxy,
         data: {
           name: "xiaoming",
         },
         params: {
-          age: 18,
         },
          method: "post",
       })
@@ -90,12 +104,12 @@ methods:{
           console.log(res);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
 },
     getHomeData: function() {
         axios.get('/mock/index.json').then(this.getHomeDataSucc)
-    },////////
+    },
     getHomeDataSucc: function(res) {
         res = res.data
         if(res.ret&&res.data) {
@@ -117,6 +131,7 @@ methods:{
 },
 mounted () {
   this.getHomeData()
+  // this.sendMeg()
 },
 }
 </script>
@@ -139,4 +154,5 @@ mounted () {
   margin: .5em;
   text-align: center;
 }
+
 </style>

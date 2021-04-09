@@ -34,7 +34,13 @@
 <script>
 export default {
     name:'HotCard',
-    props: ['images','CardBoxPatent','padActive','borderActive','showApply','showProgress'],
+    props: ['images',//数据
+    'CardBoxPatent',//动态class
+    'padActive',//动态class
+    'borderActive',//动态class
+    'showApply',//显示申请按钮
+    'showProgress'//显示进度按钮
+    ],
     data(){
         return{
             CardBox:this.CardBoxPatent,
@@ -52,10 +58,13 @@ export default {
              this.$router.push({
                 name: 'ApplyBasicInfo',
                 params: {
-                        id
+                        id:id,
+                        dataKeep:'',
+                        dataFlag:''
                 }
             })
         },
+        //点击进度按钮，进入进度查询时间轴
         gotoProgress(id){
             let getShowData={}
             Array.prototype.forEach.call(this.images, item => {
@@ -66,10 +75,12 @@ export default {
             this.$router.push({
                 name: 'QueryProgress',
             })
-            localStorage.setItem('data',JSON.stringify(getShowData));
+            sessionStorage.setItem('data',JSON.stringify(getShowData));//把点击的哪一张信用卡对应的该卡数据本地存储，在进度查询页面直接取
         },
     },
     watch:{
+        //为了组件复用，首页的热卡列表没有时间展示，申请列表有时间展示，在这里判断该组件是否展示时间
+        //这里的逻辑是当传的数据有时间字段时就展示时间，之后可以改成绑定v-if
         images(){
             Array.prototype.forEach.call(this.images, item => {
                   if(!item.time){

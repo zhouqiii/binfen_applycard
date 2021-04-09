@@ -19,6 +19,7 @@
             </div>
             <van-form class="formBox">
                 <div>
+                     <!--补充紧急联系人-->
                     <div><p class="titleCard">紧急联系人</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
@@ -57,6 +58,7 @@
                     </div>
                 </div>
                 <div>
+                    <!--补充服务功能选择-->
                     <div><p class="titleCard">服务功能选择</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
@@ -130,11 +132,11 @@ export default {
             desCard:'副标题，精简文案，突出卖点',
             picture:pic,
             formData:{
-                emergencyContact:'',
-                relationship:'',
-                emergencyConPhone:'',
-                sendWay:'',
-                sendAdress:'',
+                emergencyContact:'',//紧急联系人姓名
+                relationship:'',//紧急联系人关系
+                emergencyConPhone:'',//紧急联系人电话
+                sendWay:'',//发送方式
+                sendAdress:'',//发送地址
             },
             flag:{
                 emergencyContact:false,
@@ -160,6 +162,7 @@ export default {
         }
     },
     methods:{
+        //电话号码校验
         checkPhone(){
             let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
             if (!this.formData.emergencyConPhone) {
@@ -170,7 +173,7 @@ export default {
                 this.errMsg.mobilePhone = '格式错误！'
                 this.flag.emergencyConPhone = false
                 return false
-            } else if(this.formData.emergencyConPhone.length>11){
+            } else if(this.formData.emergencyConPhone.length>11){//限制电话号码在7-11位
                 this.errMsg.mobilePhone = '号码最多11位！'
                 this.flag.emergencyConPhone = false
             }else if(this.formData.emergencyConPhone.length<7){
@@ -183,13 +186,14 @@ export default {
                 return true
             }
         },
+         //姓名校验
         checkName(){
             const chinese = new RegExp("[\u4E00-\u9FA5]+");
-            if (!this.formData.emergencyContact) {
+            if (!this.formData.emergencyContact) { //不能为空
                 this.errMsg.name = '请填写姓名！'
                 this.flag.emergencyContact= false
                 return false
-            }else if(!chinese.test(this.formData.emergencyContact)){
+            }else if(!chinese.test(this.formData.emergencyContact)){ //姓名只能为汉字
                 this.errMsg.name = '请填汉字！'
                 this.flag.emergencyContact=false
                 return false
@@ -199,16 +203,19 @@ export default {
                 return true
             }
         },
+         //与紧急联系人的关系确定按钮
         onConfirmRelation(value){
             this.formData.relationship = value;
             this.showRelation = false;
             this.flag.relationship=true
         },
+         //发送方式确定按钮
         onConfirmSendWay(value){
             this.formData.sendWay = value;
             this.showSendWay = false;
             this.flag.sendWay=true
         },
+        //邮寄地址确定按钮
         onConfirmSendAdress(value){
             this.formData.sendAdress = value;
             this.showSendAdress = false;
@@ -217,24 +224,24 @@ export default {
         goBack(){
              this.$router.go(-1)
         },
+        //同意协议提交下一步，对每个输入信息去空格键
          submitMsg(){
             const objOld=this.formData
             let allData={}
-            Object.keys(objOld).forEach(item =>{
+            Object.keys(objOld).forEach(item =>{//对本页的输入信息做去空格键校验
                 let data=objOld[item]
                 data=data.toString()
                 data = data.split(" ").join("");
                 allData[item]=data
             })
-            let basicData=JSON.parse(sessionStorage.getItem('data'))
-            let otherData=JSON.parse(sessionStorage.getItem('otherData'))
+            let basicData=JSON.parse(sessionStorage.getItem('basicData'))//把申请第一步的基本信息取出
+            let otherData=JSON.parse(sessionStorage.getItem('otherData'))//把申请第二步的补充信息取出并转为对象
             Object.keys(basicData).forEach(item =>{
                allData[item]=basicData[item]
             })
             Object.keys(otherData).forEach(item =>{
                allData[item]=otherData[item]
-            })
-            console.log(allData)
+            })//把所有信息都存在allData对象里，在allData里和后台对应字段，并把allData传给后台
             this.$router.push({
                 name: 'ApplyEnd',
                 params:{
@@ -244,6 +251,9 @@ export default {
         },
     },
         watch:{
+            //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
+            //一个输入框校验正确，其对应的flag属性改为true，
+            //所有的输入框值校验正确，那么flag所有属性为true，此时可以点击同意按钮
             flag:{
                 handler(newVal) {
                     console.log(this.formData)
@@ -323,6 +333,7 @@ export default {
         .tips{
             margin-top: 5rem;
             padding: 0 1em;
+            margin-bottom: 1rem;
             p{
                 margin-bottom: 0;
                 margin-top: 0;
