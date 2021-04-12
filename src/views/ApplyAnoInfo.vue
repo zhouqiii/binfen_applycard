@@ -23,7 +23,7 @@
                     <div><p class="titleCard">补充其他信息</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
-                             <van-field
+                             <van-field class="idBox"
                                 v-model="formData.date"
                                 is-link
                                 readonly
@@ -84,7 +84,13 @@
                             </van-popup>
                         </div>
                         <div>
-                            <van-field class="textAreaDiv"
+                            <van-field v-model="formData.message" 
+                                label="*家庭地址" 
+                                placeholder="请输入家庭住址" 
+                                @blur="checkAdress" 
+                                :error-message="errMsg.adress"     
+                            />
+                            <!-- <van-field class="textAreaDiv"
                                 v-model="formData.message"
                                 rows="3"
                                 label="*家庭地址"
@@ -92,7 +98,7 @@
                                 placeholder="请输入家庭住址"
                                 @blur="checkAdress" 
                                 :error-message="errMsg.adress"   
-                            />
+                            /> -->
                         </div>
                     </div>
                 </div>
@@ -660,17 +666,14 @@ export default {
                 width: 65%;
                 textarea{
                     height: 4.5em;
-                    margin-top:2em;
+                    margin-top:2.2em;
                     line-height: 1.5em;
                     overflow-y: auto;
                 }
             }
         }
-        .textAreaDiv{
-            .van-field__body{
-                overflow-y: hidden;
-                width: 68% !important;
-            }
+        .idBox{
+           width: 100%;
         }
     }
 }

@@ -97,7 +97,6 @@ import pinyin from '../utils/chineseToPinYin.js'
 import formRule from '../utils/info.js'
 import DialogMessage from '../components/MyComponents/DialogMessage.vue'
 import createDom from '../utils/createDom.js'
-import AgreementDescription from '../views/AgreementDescription.vue'
 const TIME_COUNT = 60;
 export default {
   components: { SvgIcon,},
@@ -110,7 +109,7 @@ export default {
             cardPage:'',
             CardExp:[],
             thisStyle:'',
-            checkAgree:true,
+            checkAgree:'',
             btnChangeEnable:false,
             btnAgree:true,
             title:'我要申请-第1步',
@@ -130,7 +129,7 @@ export default {
                 nameEng:false,
                 checkNumber:false,
                 idcard:false,
-                agree:false,
+                agree:true,
             },
             errMsg:{//输入框错误信息提示
                 name:'',
@@ -143,30 +142,18 @@ export default {
     methods:{
         getHomeData(){
             //在这里为了响应协议查看页面的同意按钮与返回按钮
-            //1.如果url没有参数check=true/false,默认同意按钮选中
-            //2.如果url携带了check=true/false参数，则是协议说明页面进行了选择，根据参数默认同意协议选中状态
-            //3.为了两个页面响应，将check的状态在路由的query对象里传递
-            let check=window.location.href
-            let val='check=true'
-            let unval='check=false'
-            if((check.indexOf(val)==-1)&&(check.indexOf(unval)==-1)){
-                this.checkAgree=true
-                this.flag.agree=true
-            }else if(check.indexOf(unval)!=-1){
-                this.checkAgree=false
-                this.flag.agree=false
-            }else if(check.indexOf(val)!=-1){
-                this.checkAgree=true
-                this.flag.agree=true
-            }
+            //vuex里state的check参数默认同意协议选中状态
+            //3.为了两个页面响应，将check的状态在vuex的嵌套模块module3里传递
+            const check=this.$store.state.module3.check
+            this.checkAgree=check
+            this.flag.agree=check
             ////这里因为我还不会使用路由跳转保持页面数据保存，所以我把数据保存在params里
+            //目的是从协议页面跳转回来时，实现保存之前页面已经输入的信息
             if(this.$route.params.dataKeep){
                 let data = this.$route.params.dataKeep
                 let flagData = this.$route.params.dataFlag
-                console.log(data)
                 let formData=this.formData
                 let flag=this.flag
-                console.log(data,flagData)
                 Object.keys(data).forEach(item => {
                     formData[item]=data[item]
                 })
@@ -294,16 +281,9 @@ export default {
         getValue(val){
             const check = document.getElementById("check");
             const value = check.checked;
-            if(value){
-                this.checkAgree=true
-                console.log(this.checkAgree)
-               this.flag.agree=true
-            }else{
-                this.checkAgree=false
-                this.flag.agree=false
-                 console.log(this.checkAgree)
-            }
-
+            this.checkAgree=value
+            this.flag.agree=value
+            this.$store.state.module3.check=value
         },
         //同意协议提交下一步，对每个输入信息去空格键，然后缓存基本信息
         submitMsg(){
@@ -363,7 +343,7 @@ export default {
                 {},
                 {
                     title: '不要走哦，就差一点就申请好了',
-                    content: '1、先消费后付款，可以分期可以提现金                2、生成良好的个人信用记录                3、累计积分，可以免费兑换礼物哦',
+                    content: '1、先消费后付款，可以分期可以提现金</br>2、生成良好的个人信用记录</br>3、累计积分，可以免费兑换礼物哦',
                     classAno:'',//绑定一个动态class，修改弹框的标题居中或者靠左
                     show:true
                 }

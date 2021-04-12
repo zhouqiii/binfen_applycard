@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 Vue.use(Vuex)
 // 使用require.context(webpack的api)自动化读取modules文件夹下所有的js文件
 // 把modules文件夹下的所有模块添加到modules对象中，避免一个模块一个模块的添加代码比较繁琐

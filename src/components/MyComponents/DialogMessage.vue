@@ -3,7 +3,7 @@
     <div class="dialog_box">
       <div id="dialog_title"  :class="classNext">{{ title }}</div>
       <div class="dialog_content" >
-        <div><pre>{{ content }}</pre></div>
+        <div><pre v-html="content"></pre></div>
         <div v-if="showBtn" class="dialog_btn flex_evenly">
           <div class="applyBtn cancelbtn" @click="backToHome">残忍拒绝</div>
           <div class="applyBtn comfirmbtn" @click="remainApply">继续申请</div>

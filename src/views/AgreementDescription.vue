@@ -48,23 +48,9 @@ export default {
     };
   },
   methods: {
-    getUrl(){
-      //1.为了两个页面响应，将check的状态在路由的query对象里传递
-      let checkUrl=window.location.href
-      let val='check=true'
-      let unval='check=false'
-      if(checkUrl.indexOf(val)!=-1){//在协议页面已经收到基本信息里同意按钮的状态，这里用this.check保存
-        this.check=true
-      }else if(checkUrl.indexOf(unval)!=-1){
-        this.check=false
-      }
-    },
     goBack(){//如果直接返回，则保持之前的checkbox状态
        this.$router.push({
             name: 'ApplyBasicInfo',
-            query:{
-                check:this.check
-            },
             params:{
                 dataKeep:this.$route.params.dataKeep,
                 dataFlag:this.$route.params.dataFlag
@@ -74,17 +60,20 @@ export default {
     },
    agreeContract(){
      this.check=true//如果点击了同意，将this.check变为true传递
+     this.$store.state.module3.check=this.check
+     this.$route.params.dataFlag.agree=this.check
      this.$router.push({
             name: 'ApplyBasicInfo',
-            query:{
-                check:this.check
-            },
+            params:{
+                dataKeep:this.$route.params.dataKeep,
+                dataFlag:this.$route.params.dataFlag
+            }
         })
    }
 
   },
   mounted(){
-   this.getUrl()
+   
   }
   
 };

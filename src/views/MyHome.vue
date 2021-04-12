@@ -82,36 +82,25 @@ data(){
 },
 methods:{
   //加载所有信用卡信息，与数据对应
-    sendMeg(){
-        // let proxy = {
-        //     host: "192.168.50.1", //代理服务器地址
-        //     port: 8888,//端口
-        //     auth: { // auth认证信息，阿布云那边有，squid 的话不需要
-        //         username: '',password: ''
-        //     }
-        // };
+    getHomeData(){  
       this.requestAxios({
-        url: "http://192.168.50.1:8888/cardlist",
+        url: "/mock/index.json",
         // proxy:proxy,
         data: {
-          name: "xiaoming",
+          // name: "xiaoming",
         },
         params: {
         },
-         method: "post",
+         method: "get",
       })
         .then((res) => {
-          console.log(res);
+          this.getHomeDataSucc(res)
         })
         .catch((err) => {
-          //console.log(err);
         });
-},
-    getHomeData: function() {
-        axios.get('/mock/index.json').then(this.getHomeDataSucc)
     },
+    //在接口拿到数据后，在getHomeDataSucc给信用卡首页每个列表赋值
     getHomeDataSucc: function(res) {
-        res = res.data
         if(res.ret&&res.data) {
           this.imagesSwip=res.data.SwipeList
           this.images = res.data.HotList
@@ -122,7 +111,7 @@ methods:{
                     if(item.id==1){
                           this.mainCard=item
                   }else{
-                          this.cardMsgT.push(item)
+                        this.cardMsgT.push(item)
                   }
           }); 
         }
@@ -131,7 +120,6 @@ methods:{
 },
 mounted () {
   this.getHomeData()
-  // this.sendMeg()
 },
 }
 </script>
