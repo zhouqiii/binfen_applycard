@@ -43,7 +43,6 @@ export default {
   data() {
     return {
       title: "用户服务协议",
-      agree:false,
       check:'',
     };
   },
@@ -51,32 +50,37 @@ export default {
     goBack(){//如果直接返回，则保持之前的checkbox状态
        this.$router.push({
             name: 'ApplyBasicInfo',
-            params:{
-                dataKeep:this.$route.params.dataKeep,
-                dataFlag:this.$route.params.dataFlag
-            }
+            //这里因为我还没有完全解决页面跳转使用vuex+路由守卫使页面数据保存，所以我把数据保存在params里，先达到一样的功能
+            // params:{
+            //     dataKeep:this.$route.params.dataKeep,
+            //     dataFlag:this.$route.params.dataFlag
+            // }
            
         })
     },
    agreeContract(){
-     this.check=true//如果点击了同意，将this.check变为true传递
+     this.check=true//如果点击了同意，将this.check变为true并修改state
      this.$store.state.module3.check=this.check
-     this.$route.params.dataFlag.agree=this.check
      this.$router.push({
             name: 'ApplyBasicInfo',
-            params:{
-                dataKeep:this.$route.params.dataKeep,
-                dataFlag:this.$route.params.dataFlag
-            }
+            // params:{//同上
+            //     dataKeep:this.$route.params.dataKeep,
+            //     dataFlag:this.$route.params.dataFlag
+            // }
         })
    }
 
   },
   mounted(){
    
+  },
+  beforeRouteLeave(to, from, next) {
+    if(to.name=='ApplyBasicInfo'){
+        to.meta.keepAlive = true
+    }
+    next()
   }
-  
-};
+}
 </script>
 
 <style lang="less" scoped>

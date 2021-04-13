@@ -145,22 +145,24 @@ export default {
             //vuex里state的check参数默认同意协议选中状态
             //3.为了两个页面响应，将check的状态在vuex的嵌套模块module3里传递
             const check=this.$store.state.module3.check
+            console.log(check)
             this.checkAgree=check
             this.flag.agree=check
-            ////这里因为我还不会使用路由跳转保持页面数据保存，所以我把数据保存在params里
+            //问题一Q1：想在ApplyBasicInfo(A)和AgreementDescription(B)页面中，从A到B在返回A时保存A页面已经填写的信息，A不刷新，而首页返回的时候刷新
+            //问题一第一次实现的解法A1-1：这里我在实现因为我还不会使用路由跳转保持页面数据保存，所以我把数据保存在params里
             //目的是从协议页面跳转回来时，实现保存之前页面已经输入的信息
-            if(this.$route.params.dataKeep){
-                let data = this.$route.params.dataKeep
-                let flagData = this.$route.params.dataFlag
-                let formData=this.formData
-                let flag=this.flag
-                Object.keys(data).forEach(item => {
-                    formData[item]=data[item]
-                })
-                Object.keys(flagData).forEach(item => {
-                    flag[item]=flagData[item]
-                })
-            }
+            // if(this.$route.params.dataKeep){
+            //     let data = this.$route.params.dataKeep
+            //     let flagData = this.$route.params.dataFlag
+            //     let formData=this.formData
+            //     let flag=this.flag
+            //     Object.keys(data).forEach(item => {
+            //         formData[item]=data[item]
+            //     })
+            //     Object.keys(flagData).forEach(item => {
+            //         flag[item]=flagData[item]
+            //     })
+            // }
             const id=this.$route.params.id
             this.requestAxios({
                 url: "/mock/index.json",
@@ -305,16 +307,26 @@ export default {
         },
         //显示《信用卡领用合约》弹框
         showContract(){
-            //这里因为我还不会使用路由跳转使页面数据保存，所以我把数据保存在params里
+            //问题二Q2：在协议的弹窗中，内容较多，在移动端我没有实现弹框滚动
+            //A2-2：实现了弹框滚动，已在弹框组件中标注实现方法
+            //  createDom(
+            //     DialogMessage,
+            //     {},
+            //     {
+            //         title: this.readDescription.title,
+            //         content: this.readDescription.desc,
+            //         classAno:'',//绑定一个动态class，修改弹框的标题居中或者靠左
+            //         show:false
+            //     }
+            // );//
+            //并且因为协议内容较多，弹出框滚动条如果不合适，用AgreementDescription页面替代
+            //A2-1：协议说明用AgreementDescription页面替代
             this.$router.push({
                 name: 'AgreementDescription',
-                query:{
-                    check:this.checkAgree
-                },
-                params:{
-                    dataKeep:this.formData,
-                    dataFlag:this.flag
-                }
+                // params:{//A1-1：在路由中携带参数
+                //     dataKeep:this.formData,
+                //     dataFlag:this.flag
+                // }
             })
         },
         //显示年费或权益弹框
@@ -348,12 +360,38 @@ export default {
                     show:true
                 }
             );
-            // this.$router.go(-1)
         }
     },
     mounted () {
         this.getHomeData()
     },
+    // A1-2：页面不刷新的第二次实现方法keep-alive+路由守卫+vuex实现
+      beforeRouteLeave(to, from, next) {
+          let data=[]
+          data.push(this.formData)
+          data.push(this.flag)
+        const status = to.name === 'AgreementDescription'; // xxxx表示B页面
+        this.$store.commit('updateAliveList', { name: 'ApplyBasicInfo', status: status });
+        setTimeout(() => {
+            next();
+        }, 20)
+    },
+    // A1-2：页面不刷新的第二次实现方法keep-alive+路由守卫+vuex实现
+    beforeRouteEnter (to, from, next) {
+           // console.log(to, from) // 可以拿到 from， 知道上一个路由是什么，从而进行判断
+            if(from.name=='MyHome'){
+                 next(vm => {
+                    // beforeRouteENnter不能通过this访问组件实例，但是可以通过 vm 访问组件实例
+                    //如果是从信用卡首页返回的,就把当前页的数据初始化
+                    Object.assign(vm.$data.formData, vm.$options.data().formData)
+                    Object.assign(vm.$data.flag, vm.$options.data().flag)
+                    Object.assign(vm.$data.errMsg, vm.$options.data().errMsg)
+                })
+            }else{
+                return
+            }
+            next()//必须要写，实现跳转
+        },
     watch:{
         //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
         //一个输入框校验正确，其对应的flag属性改为true，
@@ -376,7 +414,7 @@ export default {
                 },
             deep:true,
         },
-    }
+    },
 }
 </script>
 <style lang="less">

@@ -121,6 +121,14 @@ methods:{
 mounted () {
   this.getHomeData()
 },
+beforeRouteLeave(to, from, next) {
+    if(to.name=='ApplyBasicInfo'){
+        to.meta.keepAlive = false
+        this.$store.state.module3.check=true
+        
+    }
+    next()
+  }
 }
 </script>
 <style lang="less" scoped>

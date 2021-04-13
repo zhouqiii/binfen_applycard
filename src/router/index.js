@@ -18,7 +18,10 @@ const routes = [
   {
     path: '/ApplyBasicInfo',
     name: 'ApplyBasicInfo',
-    component: () => import(/* webpackChunkName: "applyPage1" */ '@/views/ApplyBasicInfo')
+    component: () => import(/* webpackChunkName: "applyPage1" */ '@/views/ApplyBasicInfo'),
+    meta:{
+      keepAlive:true
+    }
   },
   {
     path: '/ApplyAnoInfo',

@@ -57,6 +57,7 @@ export default {
 
 <style lang="less" scoped>
 div  pre{
+  height: auto;
   white-space: pre-wrap; /*css-3*/
 	white-space: -moz-pre-wrap; /*Mozilla,since1999*/
 	white-space: -pre-wrap; /*Opera4-6*/
@@ -101,8 +102,13 @@ div  pre{
     .dialog_content {
       min-height: 30px;
       // margin-top: 30px;
-      overflow-y: auto;
-      height: 90%;
+      overflow-y: scroll;
+      height: 800px;//这里学到了一个解决弹框滚动的问题，父级元素设置一个高度，并设置-webkit-overflow-scrolling:touch;设置overflow；scroll，给子元素设置overflow；auto
+      -webkit-overflow-scrolling:touch;  //解决滑动不顺畅
+      &::-webkit-scrollbar {   //隐藏滚动条
+        display: none;
+      }
+
       font-size: 14px;
       word-break: break-all;
       display: inline-block;
