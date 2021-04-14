@@ -1,0 +1,189 @@
+/*用媒体查询@media实现根据不同的屏幕设置html的fontsize*/
+/*device-width 是设备实际的宽度，不会随着屏幕的旋转而改变，因此并不适合开发响应式网站。
+1.device-width 只和设备的分辨率有关，一般是分辨率/设备像素比，且不会随着手机旋转而改变其值
+2.width 会和 viewport 的 scale 属性相关，为页面的可视区域的宽度
+比如 iphone5s 的屏幕分辨率宽为 640，由于 retina 显示策略，当 scale 设置为1的时候，对应的media 中取到的 width 为320，当 scale 设置为0.5的时候，width为640，而 device-width 始终是320。*/
+@media (min-device-width : 375px) and (max-device-width : 667px) and (-webkit-min-device-pixel-ratio : 2){
+    html{font-size: 37.5px;}
+}
+/*当页面大于1200px 时，大屏幕，主要是PC 端*/
+@media (min-width: 1200px) {
+    
+}
+/*在992 和1199 像素之间的屏幕里，中等屏幕，分辨率低的PC*/
+@media (min-width: 992px) and (max-width: 1199px) {
+    #adver .center {
+        width: 50%;
+        margin: -10px 0 0 -25%;
+    }
+    main .center h2 {
+        font-size: 40px;
+    }
+}
+/*在768 和991 像素之间的屏幕里，小屏幕，主要是PAD*/
+@media (min-width: 768px) and (max-width: 991px) {
+    #adver .center {
+        width: 60%;
+        margin: -10px 0 0 -30%;
+    }
+    #adver .search, #adver .button {
+        font-size: 20px;
+    }
+    main .center h2 {
+        font-size: 35px;
+    }
+}
+移动端媒体查询的一些尺寸参考
+
+/*iphone4 4s*/
+
+@media only screen and (device-height :480px) and (-webkit-device-pixel-ratio:2){
+
+/* Styles */
+
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+
+/* Styles */
+
+}
+
+ 
+
+/*iphone5*/
+
+@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2){
+
+/* Styles */
+
+}
+
+ 
+
+/*iphone6*/
+
+@media (min-device-width : 375px) and (max-device-width : 667px) and (-webkit-min-device-pixel-ratio : 2){
+
+/* Styles */
+
+}
+
+ 
+
+/*iphone6+*/
+
+@media (min-device-width : 414px) and (max-device-width : 736px) and (-webkit-min-device-pixel-ratio : 3){
+
+/* Styles */
+
+}
+
+ 
+
+/* iPads (portrait)  */
+
+@media only screen
+
+and (min-device-width : 768px)
+
+and (max-device-width : 1024px)
+
+and (orientation : portrait) {
+
+/* Styles */
+
+}
+
+/* iPads (landscape)  */
+
+ 
+
+@media only screen
+
+and (min-device-width : 768px)
+
+and (max-device-width : 1024px)
+
+and (orientation : landscape) {
+
+/* Styles */
+
+}
+
+ 
+
+/* iPads (portrait and landscape) */
+
+@media only screen
+
+and (min-device-width : 768px)
+
+and (max-device-width : 1024px) {
+
+/* Styles */
+
+}
+
+ 
+
+/*魅族*/
+
+@media only screen and (min-device-width :1080px) and (-webkit-min-device-pixel-ratio : 2.5){
+
+/* Styles */
+
+ }
+
+ 
+
+/*mate7*/
+
+@media only screen and (min-device-width :1080px) and (-webkit-min-device-pixel-ratio : 3){
+
+/* Styles */
+
+ }
+
+ 
+
+/* 平板之类的宽度 1024 以下设备 */
+
+@media only screen and (min-width: 321px) and (max-width: 1024px) {
+
+/* Styles */
+
+}
+
+ 
+
+/* PC客户端或大屏幕设备: 1028px 至更大 */
+
+@media only screen and (min-width: 1029px) {
+
+/* Styles */
+
+}
+
+ 
+
+/* 竖屏 */
+
+@media screen and (orientation:portrait) and (max-width: 720px) {
+
+/* Styles */
+
+}
+
+ 
+
+/* 横屏 */
+
+@media screen and (orientation:landscape) and (min-width : 480px){
+
+/* Styles */
+
+}
+
+
+ 
