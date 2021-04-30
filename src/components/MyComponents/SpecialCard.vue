@@ -12,11 +12,11 @@
                 <div :class="box_frame_next">
                     <div v-for="(image, index) in nextCard" :key="index" class="nextcard">
                         <div style="margin:2% 0% auto 3%">
-                            <p class="titleCard">{{image.title}}</p>
-                            <p class="cardNumber">{{image.des}}</p>
+                            <p class="titleCard">{{image.cardName}}</p>
+                            <p class="cardNumber">{{image.cardIntro}}</p>
                         </div>
-                        <div style="margin:.5em .5em;text-align:right">
-                            <img :src="image.imgUrl"/>
+                        <div style="margin:.5em .5em;float:right;width:30%">
+                            <img :src="image.defaultPic"/>
                         </div>
                     </div>
                 </div>
@@ -89,12 +89,12 @@ export default {
   }
 }
 .box_frame_next{
-    width: 45%;
+    width: 48.5%;
     display: flex;
     justify-content: space-between;
     flex-direction:column;
     .nextcard{
-        border: 1px solid #333333;
+        border: 1px solid #83757569;
         border-radius: 5%;
         .titleCard{
             margin-top: 0%;

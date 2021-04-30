@@ -7,22 +7,22 @@
                 </p>
             </div>
             <div class="box_frame cart" :class="{activeBox: borActive}" v-for="(image, index) in images" :key="index">
-                <p v-if="showTime" class="cardNumber" style="margin-bottom:.8em">申请时间： {{image.time}}</p>
+                <p v-if="showTime" class="cardNumber" style="margin-bottom:.8em">申请时间： {{image.applyTime}}</p>
                 <div class="card" >
-                    <div>
-                        <img :src="image.imgUrl"/>
+                    <div style="width:30%">
+                        <img :src="image.defaultPic"/>
                     </div>
                     <div style="width:62%;margin:auto 0% auto 3%">
-                        <p class="titleCard">{{image.title}}</p>
-                        <p class="cardNumber">{{image.des}}</p>
+                        <p class="titleCard">{{image.cardName}}</p>
+                        <p class="cardNumber">{{image.cardIntro}}</p>
                     </div>
                     <div style="margin:auto" v-if="showApplyGet">
-                        <div class="applyCard" @click="gotoApplyPage(image.id)">
+                        <div class="applyCard" @click="gotoApplyPage(image.cardId)">
                             申请
                         </div>
                     </div>
                      <div style="margin:auto"  v-if="showProgressGet">
-                        <div class="applyProgress" @click="gotoProgress(image.id)">
+                        <div class="applyProgress" @click="gotoProgress(image)">
                             {{image.progress}}
                         </div>
                     </div>
@@ -55,27 +55,21 @@ export default {
     },
     methods:{
         gotoApplyPage(id){
-             this.$router.push({
+            this.$router.push({
                 name: 'ApplyBasicInfo',
-                params: {
-                        id:id,
-                        dataKeep:'',
-                        dataFlag:''
+                query: {
+                        cardId:JSON.stringify(id),
                 }
             })
         },
         //点击进度按钮，进入进度查询时间轴
-        gotoProgress(id){
-            let getShowData={}
-            Array.prototype.forEach.call(this.images, item => {
-                if(item.id==id){
-                    getShowData=item
-                }
-            }); 
+        gotoProgress(res){
             this.$router.push({
                 name: 'QueryProgress',
+                query:{
+                    data:JSON.stringify(res)
+                }
             })
-            sessionStorage.setItem('data',JSON.stringify(getShowData));//把点击的哪一张信用卡对应的该卡数据本地存储，在进度查询页面直接取
         },
     },
     watch:{
@@ -83,7 +77,7 @@ export default {
         //这里的逻辑是当传的数据有时间字段时就展示时间，之后可以改成绑定v-if
         images(){
             Array.prototype.forEach.call(this.images, item => {
-                  if(!item.time){
+                  if(!item.applyTime){
                       this.showTime=false
                   }
           }); 

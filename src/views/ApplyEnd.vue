@@ -1,9 +1,6 @@
 <template>
     <div>
         <common-header :title="title">
-            <template v-slot:back>
-                <svg-icon iconClass="fanhuijiantou" @click="goBack"></svg-icon>
-            </template>
         </common-header>
         <div>
             <div class="responsePage">
@@ -33,12 +30,14 @@
                     <template v-slot:hotTitle>{{hotTitle}}</template>
                 </hot-card>
             </div>
+            <div style="position:fixed;width:100%;margin:auto;bottom:.35rem">
+              <div class="bottomText">*更多便捷服务体验，尽在缤纷生活</div>
+            </div>
         </div>
     </div>
 </template>
 <script>
 import SvgIcon from '../components/SvgIcon.vue'
-import axios from 'axios'
 export default {
   components: { SvgIcon},
     name:'ApplyEnd',
@@ -56,49 +55,39 @@ export default {
         }
     },
     methods:{
-        goBack(){
-             this.$router.go(-1)
+       
+        getHomeData() {
+            //在这里应该对申请的信息提交状态判断
+            //如果信息提交成功，那么返回申请成功的样式，否则申请失败的样式
+            if(this.$route.query.data){
+                let data=JSON.parse(this.$route.query.data)
+                this.msgIcon = true
+                this.applyTitle = '信用卡申请成功'
+                this.applyNum = `申请证件件编号：${data}`
+            }
+           else{
+                this.msgIcon = false
+                this.applyTitle = '信用卡申请失败'
+                this.applyNum = `无编号`
+            }
+            this.images = JSON.parse(sessionStorage.getItem('hotcard'))
         },
-        getHomeData: function() {
-            axios.get('/mock/index.json').then(this.getHomeDataSucc)
-        },
-        //在这里应该对申请的信息提交状态判断
-        //如果信息提交成功，那么返回申请成功的样式，否则申请失败的样式
-        getHomeDataTest(){
-            this.msgIcon = true
-            this.applyTitle = '信用卡申请成功'
-            this.applyNum = `申请件编号：0325363457488`
-        },
-        getHomeDataSucc(res) {
-            res = res.data
-            if(res.ret&&res.data) {
-            this.images = res.data.HotList
-          
-        }
-    },
     //返回信用卡申请首页
         goToHome(){
             this.$router.push({
                 name: 'MyHome',
-                params:{
-                    id:this.$route.params.id
-                },
             })   
         },
         //返回该用户申请列表
         goToList(){
             this.$router.push({
                 name: 'ApprovalList',
-                params:{
-                    id:this.$route.params.id
-                },
             })      
         }
         
 
     },
     mounted () {
-        this.getHomeDataTest()
         this.getHomeData()
     },
 }
@@ -112,7 +101,7 @@ export default {
         // position: absolute;
         background: #ffffff;
         width: -webkit-fill-available;
-        margin-top: -9%;
+        margin-top: -11%;
     }
     .box_frameCheck{
         display: flex;
@@ -126,11 +115,7 @@ export default {
         }
         p{
             margin-bottom: 0;
-            margin-top: .8em;
-        }
-        .stateIcon{
-            font-size: 2rem;
-            margin: auto;
+            margin-top: .5rem;
         }
         .box_frame-row{
             margin-top: .8em;

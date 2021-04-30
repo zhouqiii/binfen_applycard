@@ -1,60 +1,72 @@
 <template>
     <div>
-        <common-header :title="title">
-            <template v-slot:back>
-                <svg-icon iconClass="fanhuijiantou" @click="goBack"></svg-icon>
-            </template>
+        <common-header :title="title" ifDialog='1'>
         </common-header>
         <div class="contentBody">
-            <div class="boxCarousel">
-                <el-carousel :interval="5000" arrow="always" :autoplay="false" >
-                    <el-carousel-item v-for="(item,index) in cardPage" :key="index" style="height:10rem">
-                            <el-card :body-style="{ padding: '0px' }">
-                                <img :src="item.imgUrl">
-                                <div>
-                                    <span>{{item.title}}</span>
-                                    </br>
-                                    <span class="time">{{item.des}}</span>
-                                </div>
-                            </el-card>
-                    </el-carousel-item>
-                </el-carousel>
-            </div>
-            <div style="padding:1% 3%">
-                <div v-for="(item,index) in CardExp" :key="index"  class="box_frame-row" style="height:2em">
-                    <div class="exper">{{item.title}}</div>
-                    <div class="description"><span>{{item.des}}</span></div>
-                    <div @click="showDescription(index)" class="btn"><svg-icon iconClass="showDec"></svg-icon></div>
+            <!--把这里要展示的轮播图信息统一放在cardExp里，cardMsg是当前页面停留在的card信息-->
+            <!--card信息展示部分-->
+             <div class="box_frame-row applyAllCard">
+                <div @click="changeCardLeft()">
+                    <svg-icon iconClass="left"></svg-icon>
+                </div>
+                <div class="box_frame">
+                    <div><img :src="cardMsg.defaultPic"/></div>
+                    <div>
+                        <p>{{cardMsg.cardName}}</p>
+                    </div>
+                    <div>
+                        <p class="time">{{cardMsg.cardIntro}}</p>
+                    </div>
+                </div>
+                <div @click="changeCardRight()">
+                    <svg-icon iconClass="right"></svg-icon>
                 </div>
             </div>
+            <div style="padding:1% 3%">
+                <div style="height:2em" class="box_frame-row">
+                    <div class="exper">年费</div>
+                    <div class="description"><span>{{cardMsg.nian}}</span></div>
+                    <div @click="showNian(cardMsg.nianName,cardMsg.nianContent)" class="btn">
+                        <svg-icon iconClass="right"></svg-icon>
+                    </div>
+                </div>
+                <div style="height:2em" class="box_frame-row">
+                    <div class="exper">权益</div>
+                    <div class="description"><span>{{cardMsg.quan}}</span></div>
+                    <div @click="showDescription(cardMsg.quanName,cardMsg.quanContent)" class="btn">
+                        <svg-icon iconClass="right"></svg-icon>
+                    </div>
+                </div>
+            </div>
+            <!--card信息展示部分结束-->
             <div>
                 <div class="formBox basicInfo">
                     <div><p class="titleCard">基本信息</p></div>
                     <div>
                         <van-form class="ruleForm">
                             <div class="formItem">
-                                <van-field v-model="formData.name" 
+                                <van-field v-model="formData.chineseName" 
                                     label="*中文姓名" 
                                     placeholder="中文姓名" 
                                     @blur="getPinYin"
-                                    :error-message="errMsg.name"
+                                    :error-message="errMsg.chineseName"
                                 />
-                                <!-- :error-message="errMsg.name"    -->
+                                <!-- :error-message="errMsg.chineseName"    -->
                             </div>
                             <div class="formItem">
-                                <van-field v-model="formData.nameEng" 
+                                <van-field v-model="formData.chinesePinyin" 
                                     label="*姓名拼音" 
                                     placeholder="英文姓名" 
-                                    @blur="checkNameEng" 
-                                    :error-message="errMsg.nameEng"  
+                                    @blur="checkchinesePinyin" 
+                                    :error-message="errMsg.chinesePinyin"  
                                 />
                             </div>
                             <div class="formItem">
-                                <van-field v-model="formData.idcard"
+                                <van-field v-model="formData.idCard"
                                     label="*身份证号码" 
                                     placeholder="身份证号" 
                                     @blur="checkCard" 
-                                    :error-message="errMsg.idcard" 
+                                    :error-message="errMsg.idCard" 
                                 />
                             </div>
                              <div class="formItem" style="display:flex;flex-direction:row;justify-content: space-between;">
@@ -94,13 +106,12 @@
 <script>
 import SvgIcon from '../components/SvgIcon.vue';
 import pinyin from '../utils/chineseToPinYin.js'
-import formRule from '../utils/info.js'
 import DialogMessage from '../components/MyComponents/DialogMessage.vue'
 import createDom from '../utils/createDom.js'
 const TIME_COUNT = 60;
 export default {
   components: { SvgIcon,},
-    name:'ApplyBasicInfo',
+    chineseName:'ApplyBasicInfo',
     components:{
     },
     data(){
@@ -109,8 +120,10 @@ export default {
             cardPage:'',
             CardExp:[],
             thisStyle:'',
-            checkAgree:'',
+            cardMsg: '',
+            checkAgree:true,
             btnChangeEnable:false,
+            getCardId: JSON.parse(this.$route.query.cardId),
             btnAgree:true,
             title:'我要申请-第1步',
             countdown:'',
@@ -119,77 +132,89 @@ export default {
             showCount:false,
             show: false,
             formData: {
-                name: '',//中文姓名
-                nameEng:'',//姓名拼音
+                chineseName: '',//中文姓名
+                chinesePinyin:'',//姓名拼音
                 checkNumber:'',//验证码
-                idcard:'',//身份证号
+                idCard:'',//身份证号
             },
             flag:{//flag里的每一个属性对应一个输入框的校验,校验正确flag里该对应属性修改为true
-                name: false,
-                nameEng:false,
+                chineseName: false,
+                chinesePinyin:false,
                 checkNumber:false,
-                idcard:false,
+                idCard:false,
                 agree:true,
             },
             errMsg:{//输入框错误信息提示
-                name:'',
-                nameEng:'',
-                idcard:'',
+                chineseName:'',
+                chinesePinyin:'',
+                idCard:'',
                 checkNumber:''
             }
       };
     },
     methods:{
         getHomeData(){
-            //在这里为了响应协议查看页面的同意按钮与返回按钮
-            //vuex里state的check参数默认同意协议选中状态
-            //3.为了两个页面响应，将check的状态在vuex的嵌套模块module3里传递
-            const check=this.$store.state.module3.check
-            console.log(check)
-            this.checkAgree=check
-            this.flag.agree=check
-            //问题一Q1：想在ApplyBasicInfo(A)和AgreementDescription(B)页面中，从A到B在返回A时保存A页面已经填写的信息，A不刷新，而首页返回的时候刷新
-            //问题一第一次实现的解法A1-1：这里我在实现因为我还不会使用路由跳转保持页面数据保存，所以我把数据保存在params里
-            //目的是从协议页面跳转回来时，实现保存之前页面已经输入的信息
-            // if(this.$route.params.dataKeep){
-            //     let data = this.$route.params.dataKeep
-            //     let flagData = this.$route.params.dataFlag
-            //     let formData=this.formData
-            //     let flag=this.flag
-            //     Object.keys(data).forEach(item => {
-            //         formData[item]=data[item]
-            //     })
-            //     Object.keys(flagData).forEach(item => {
-            //         flag[item]=flagData[item]
-            //     })
-            // }
-            const id=this.$route.params.id
+            //这部分的产品逻辑没有确定，后台接口逻辑没法使用，用本地的数据
+            //首页进来路由携带query携带cardId
             this.requestAxios({
                 url: "/mock/index.json",
-                data: {
-                    id: id,
-                },
-                params: {
-                // age: 18,
-                },
                 method: "get",
             })
             .then((res) => {
-                console.log(res.data)
-                this.cardPage = res.data.CardPage
                 Array.prototype.forEach.call(res.data.CardExp, item => {
-                     if(item.id<=1){
-                        this.CardExp.push(item)
-                     }if(item.id==2){
-                         this.readDescription.title = item.dialogTitle
-                         this.readDescription.desc = item.dialogDesc
-                     }
-            }); 
+                    if (item.cardId === this.getCardId) {
+                        this.cardMsg = item;//如果这里信用卡的cardId和路由携带cardId一致，赋值cardMsg（当前页面停留在的卡面信息）
+                    }
+                    if(item.cardId === 100010) {//协议弹框内容
+                        this.readDescription.title = item.dialogcardName
+                        this.readDescription.desc = item.dialogcardIntroc
+                       
+                    }else{
+                         this.CardExp.push(item);// CardExp对应年费和权益的弹框信息
+                    }
+                }); 
+                console.log(this.CardExp)
             })
             .catch((err) => {
                 console.log(err);
             });
         },
+        // 点击右边切换图片
+    changeCardRight() {
+      const len = this.CardExp.length;
+      // eslint-disable-next-line no-restricted-syntax
+      for (let i = 0; i < len; i++) {
+        if (this.getCardId === this.CardExp[i].cardId) {
+          if (i === len - 1) {
+            this.getCardId = this.CardExp[0].cardId;
+            this.cardMsg = this.CardExp[0];
+            break;
+          } else {
+            this.getCardId = this.CardExp[i + 1].cardId;
+            this.cardMsg = this.CardExp[i + 1];
+            break;
+          }
+        }
+      }
+    },
+    // 点击左边切换图片
+    changeCardLeft() {
+      const len = this.CardExp.length;
+      // eslint-disable-next-line no-restricted-syntax
+      for (let i = 0; i < len; i++) {
+        if (this.getCardId === this.CardExp[i].cardId) {
+          if (i === 0) {
+            this.getCardId = this.CardExp[len - 1].cardId;
+            this.cardMsg = this.CardExp[len - 1];
+            break;
+          } else {
+            this.getCardId = this.CardExp[i - 1].cardId;
+            this.cardMsg = this.CardExp[i - 1];
+            break;
+          }
+        }
+      }
+    },
         //点击按钮触发发送验证码计时器
         timeStart(){
             if (!this.timer) {
@@ -212,58 +237,58 @@ export default {
         getPinYin(){
             console.log(11)
             const chinese = new RegExp("[\u4E00-\u9FA5]+");
-            if (!this.formData.name) {
-                this.errMsg.name = '请填姓名！'
-                this.flag.name=false
+            if (!this.formData.chineseName) {
+                this.errMsg.chineseName = '请填姓名！'
+                this.flag.chineseName=false
                 return false
-            }else if(!chinese.test(this.formData.name)){
-                this.errMsg.name = '请填汉字！'
-                this.flag.name=false
+            }else if(!chinese.test(this.formData.chineseName)){
+                this.errMsg.chineseName = '请填汉字！'
+                this.flag.chineseName=false
                 return false
             }else {
-                this.errMsg.name = ''
-                this.flag.name=true
-                this.formData.nameEng=pinyin.chineseToPinYin(this.formData.name);
-                this.checkNameEng()
+                this.errMsg.chineseName = ''
+                this.flag.chineseName=true
+                this.formData.chinesePinyin=pinyin.chineseToPinYin(this.formData.chineseName);
+                this.checkchinesePinyin()
                 return true
             }
         },
         //输入姓名拼音失焦事件
-        checkNameEng(){
+        checkchinesePinyin(){
             const english = new RegExp("[A-Za-z]+");
-            if (!this.formData.nameEng) {
-                this.errMsg.nameEng = '请填姓名拼音！'
-                this.flag.nameEng=false
+            if (!this.formData.chinesePinyin) {
+                this.errMsg.chinesePinyin = '请填姓名拼音！'
+                this.flag.chinesePinyin=false
                 return false
-            }else if(!english.test(this.formData.nameEng)){
-                this.errMsg.nameEng = '请填拼音！'
-                this.flag.nameEng=false
+            }else if(!english.test(this.formData.chinesePinyin)){
+                this.errMsg.chinesePinyin = '请填拼音！'
+                this.flag.chinesePinyin=false
                 return false
             }else {
-                this.errMsg.nameEng = ''
-                this.flag.nameEng=true
+                this.errMsg.chinesePinyin = ''
+                this.flag.chinesePinyin=true
                 return true
             }
         },
         //输入身份证号失焦事件
         checkCard(){
-            //formRule.checkCard(this.formData.idcard,this.errMsg.idcard,this.flag.idcard)
+            //formRule.checkCard(this.formData.idCard,this.errMsg.idCard,this.flag.idCard)
             let zg =  /^[0-9a-zA-Z]*$/;
-            if (!this.formData.idcard) {
-                this.errMsg.idcard = '请填身份证号！'
-                this.flag.idcard=false
+            if (!this.formData.idCard) {
+                this.errMsg.idCard = '请填身份证号！'
+                this.flag.idCard=false
                 return false
-            }else if(this.formData.idcard.length!=18){
-                this.errMsg.idcard = '位数错误！'
-                this.flag.idcard=false
+            }else if(this.formData.idCard.length!=18){
+                this.errMsg.idCard = '位数错误！'
+                this.flag.idCard=false
                  return false
-            }else if(!zg.test(this.formData.idcard)){//校验只能输入数字和字母
-                this.errMsg.idcard = '格式错误！'
-                this.flag.idcard=false
+            }else if(!zg.test(this.formData.idCard)){//校验只能输入数字和字母
+                this.errMsg.idCard = '格式错误！'
+                this.flag.idCard=false
                 return false
             }else{
-                this.errMsg.idcard = ''
-                this.flag.idcard=true
+                this.errMsg.idCard = ''
+                this.flag.idCard=true
                 return true
             }
         },
@@ -285,7 +310,6 @@ export default {
             const value = check.checked;
             this.checkAgree=value
             this.flag.agree=value
-            this.$store.state.module3.check=value
         },
         //同意协议提交下一步，对每个输入信息去空格键，然后缓存基本信息
         submitMsg(){
@@ -299,99 +323,59 @@ export default {
             })
             sessionStorage.setItem('basicData',JSON.stringify(objNew))//转成字符串
             this.$router.push({
-                name: 'ApplyAnoInfo',
-                params:{
-                    id:this.$route.params.id
+                path: '/ApplyAnoInfo',
+                query:{
+                    cardId:this.$route.query.cardId,
+                    data:JSON.stringify(this.cardMsg)
                 },
             })
         },
         //显示《信用卡领用合约》弹框
         showContract(){
-            //问题二Q2：在协议的弹窗中，内容较多，在移动端我没有实现弹框滚动
             //A2-2：实现了弹框滚动，已在弹框组件中标注实现方法
-            //  createDom(
-            //     DialogMessage,
-            //     {},
-            //     {
-            //         title: this.readDescription.title,
-            //         content: this.readDescription.desc,
-            //         classAno:'',//绑定一个动态class，修改弹框的标题居中或者靠左
-            //         show:false
-            //     }
-            // );//
-            //并且因为协议内容较多，弹出框滚动条如果不合适，用AgreementDescription页面替代
-            //A2-1：协议说明用AgreementDescription页面替代
-            this.$router.push({
-                name: 'AgreementDescription',
-                // params:{//A1-1：在路由中携带参数
-                //     dataKeep:this.formData,
-                //     dataFlag:this.flag
-                // }
-            })
+             createDom(
+                DialogMessage,
+                {},
+                {
+                    title: this.readDescription.title,
+                    content: this.readDescription.desc,
+                    classAno:'',//绑定一个动态class，修改弹框的标题居中或者靠左
+                    show:false,
+                    paClassScroll:'dialogScroll'//绑定一个动态class，修改弹框的content部分，有滚动条的给固定长度，无滚动条的自适应
+                }
+            );
+            
         },
         //显示年费或权益弹框
-        //年费和权益后台传的id：年费=1，权益=0；
-        //所以index=0显示权益，index=1显示年费
-        showDescription(index){
-            Array.prototype.forEach.call(this.CardExp, item => {
-                     if(item.id==index){
-                        createDom(
-                            DialogMessage,
-                            {},
-                            {
-                                title: item.dialogTitle,
-                                content: item.dialogDesc,
-                                classAno:'introduction',//绑定一个动态class，修改弹框的标题居中或者靠左
-                                show:false
-                            }
-                        );
-                     }
-            }); 
-        },
-        //头部返回弹框
-        goBack(){
+        showDescription(title,content){
             createDom(
                 DialogMessage,
                 {},
                 {
-                    title: '不要走哦，就差一点就申请好了',
-                    content: '1、先消费后付款，可以分期可以提现金</br>2、生成良好的个人信用记录</br>3、累计积分，可以免费兑换礼物哦',
-                    classAno:'',//绑定一个动态class，修改弹框的标题居中或者靠左
-                    show:true
+                    title: title,
+                    content: content,
+                    classAno:'introduction',//绑定一个动态class，修改弹框的标题居中或者靠左
+                    show:false
                 }
             );
-        }
+        },
+        showNian(title,content){
+            createDom(
+                DialogMessage,
+                {},
+                {
+                    title: title,
+                    content: content,
+                    classAno:'introduction',//绑定一个动态class，修改弹框的标题居中或者靠左
+                    show:false
+                }
+            );
+        },
+      
     },
     mounted () {
         this.getHomeData()
     },
-    // A1-2：页面不刷新的第二次实现方法keep-alive+路由守卫+vuex实现
-      beforeRouteLeave(to, from, next) {
-          let data=[]
-          data.push(this.formData)
-          data.push(this.flag)
-        const status = to.name === 'AgreementDescription'; // xxxx表示B页面
-        this.$store.commit('updateAliveList', { name: 'ApplyBasicInfo', status: status });
-        setTimeout(() => {
-            next();
-        }, 20)
-    },
-    // A1-2：页面不刷新的第二次实现方法keep-alive+路由守卫+vuex实现
-    beforeRouteEnter (to, from, next) {
-           // console.log(to, from) // 可以拿到 from， 知道上一个路由是什么，从而进行判断
-            if(from.name=='MyHome'){
-                 next(vm => {
-                    // beforeRouteENnter不能通过this访问组件实例，但是可以通过 vm 访问组件实例
-                    //如果是从信用卡首页返回的,就把当前页的数据初始化
-                    Object.assign(vm.$data.formData, vm.$options.data().formData)
-                    Object.assign(vm.$data.flag, vm.$options.data().flag)
-                    Object.assign(vm.$data.errMsg, vm.$options.data().errMsg)
-                })
-            }else{
-                return
-            }
-            next()//必须要写，实现跳转
-        },
     watch:{
         //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
         //一个输入框校验正确，其对应的flag属性改为true，
@@ -445,19 +429,14 @@ button{
 outline:none;
 
 }
-/* el-swipe样式*/
-.el-carousel__container{
-    height: 10rem;
+.applyAllCard{
+    padding: 0 1rem;
+    .box_frame{
+        p{
+            margin: 0;
+        }
+    }
 }
-.el-carousel__item{
-    text-align: center;
-}
-.el-carousel__arrow{
-    background: inherit !important;
-    color: gray !important;
-    font-size: 20px !important;
-}
-/*.el-swipe样式*/
 .checkNum{
     height: 1.5em;
     line-height: 1.5em;

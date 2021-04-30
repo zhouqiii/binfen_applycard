@@ -7,7 +7,7 @@ import createDom from "@/utils/createDom"
 // 引入判空的方法
 import { notNull } from "@/utils/commonFn"
 export const instance = axios.create({
-    baseURL: "",
+    baseURL:'',//process.env.NODE_ENV === 'development'?'https://alex188.cn/AppPrj1/cgi.do?txnId=2APO200001&dns=628&gtype=9&attest=-339418059&imei=124545':'/AppPrj',
     timeout: 15000
 })
 let ld;
@@ -33,7 +33,7 @@ instance.interceptors.response.use(response => {
     if (response.status === 200) {  
         if (notNull(response.data)) {
 
-        }   // 响应结果里的status: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
+        }  
         return Promise.resolve(response.data)
     } else {
       return Promise.reject(response.data.message)

@@ -1,9 +1,9 @@
 <template>
   <div class="dialog">
     <div class="dialog_box">
-      <div id="dialog_title"  :class="classNext">{{ title }}</div>
-      <div class="dialog_content" >
-        <div><pre v-html="content"></pre></div>
+      <p class="dialog_title"  :class="classNext">{{ title }}</p>
+      <div class="dialog_content" :class="classScroll">
+        <div class="text_rule"><div v-html="content"></div></div>
         <div v-if="showBtn" class="dialog_btn flex_evenly">
           <div class="applyBtn cancelbtn" @click="backToHome">残忍拒绝</div>
           <div class="applyBtn comfirmbtn" @click="remainApply">继续申请</div>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="dialog_icon" @click="dialogHide">
-      <svg-icon iconClass="cancelDialog"></svg-icon>
+      <svg-icon iconClass="cancelDialog" class="stateIcon"></svg-icon>
     </div>
   </div>
 </template>
@@ -23,13 +23,14 @@ import router from "../../router/index.js"
 export default {
   components: { SvgIcon },
   name: "DialogMessage",
-  props:['classAno','show'],
+  props:['classAno','show','paClassScroll'],
   data() {
     return {
       title: "",
       content: "",
       classNext:'',
-      showBtn:false
+      showBtn:false,
+      classScroll:''
     };
   },
   methods: {
@@ -48,6 +49,7 @@ export default {
   watch:{
     classAno(){
       this.classNext=this.classAno
+      this.classScroll=this.paClassScroll
       this.showBtn=this.show
     }
   }
@@ -56,16 +58,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-div  pre{
-  height: auto;
-  white-space: pre-wrap; /*css-3*/
-	white-space: -moz-pre-wrap; /*Mozilla,since1999*/
-	white-space: -pre-wrap; /*Opera4-6*/
-	white-space: -o-pre-wrap; /*Opera7*/
-	word-wrap: break-word; /*InternetExplorer5.5+*/
-  line-height: 1.5em;
-  font-family: inherit;
-  }
 .warnText{
   color: #F44336;
 }
@@ -90,20 +82,23 @@ div  pre{
     background: #fff;
     border-radius: 10px;
     overflow-y: hidden;
-    #dialog_title {
+    .dialog_title {
       height: 36px;
-      // margin-bottom: px;
+      //padding-bottom: 25px;
       max-height: 100%;
       font-size: 14px;
       font-weight: bold;
       color: #f72539;
       .flex_center;
     }
+    .dialogScroll{
+      height: 800px !important;
+    }
     .dialog_content {
       min-height: 30px;
       // margin-top: 30px;
       overflow-y: scroll;
-      height: 800px;//这里学到了一个解决弹框滚动的问题，父级元素设置一个高度，并设置-webkit-overflow-scrolling:touch;设置overflow；scroll，给子元素设置overflow；auto
+      height: 90%;//这里学到了一个解决弹框滚动的问题，父级元素设置一个高度，并设置-webkit-overflow-scrolling:touch;设置overflow；scroll，给子元素设置overflow；auto
       -webkit-overflow-scrolling:touch;  //解决滑动不顺畅
       &::-webkit-scrollbar {   //隐藏滚动条
         display: none;
@@ -114,6 +109,16 @@ div  pre{
       display: inline-block;
       width: 100%;
 	    white-space: normal;
+      .text_rule{
+        height: auto;
+        white-space: pre-wrap; /*css-3*/
+        white-space: -moz-pre-wrap; /*Mozilla,since1999*/
+        white-space: -pre-wrap; /*Opera4-6*/
+        white-space: -o-pre-wrap; /*Opera7*/
+        word-wrap: break-word; /*InternetExplorer5.5+*/
+        line-height: 1.6em;
+        font-family: inherit;
+      }
       .dialog_btn{
         height: 75px;
         line-height: 75px;

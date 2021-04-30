@@ -1,5 +1,4 @@
-const state = {//基础信息和同意协议页面切换，使基础信息页面信息保存
-  keepAliveList:[],
+const state = {
     check:true
   }
   const getters = {
@@ -11,11 +10,7 @@ const state = {//基础信息和同意协议页面切换，使基础信息页面
   }
   // mutations
   const mutations = {
-    updateAliveList(state, { name, status ,data}) {
-      if (status) {
-        state.keepAliveList.push(name);
-      }
-    }
+   
   }
 export default {
     state,

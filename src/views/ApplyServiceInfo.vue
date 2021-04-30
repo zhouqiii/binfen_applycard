@@ -1,19 +1,15 @@
 <template>
     <div>
-        <common-header :title="title">
-            <template v-slot:back>
-                <svg-icon iconClass="fanhuijiantou" @click="goBack"></svg-icon>
-            </template>
-        </common-header>
+        <common-header :title="title"></common-header>
         <div>
             <div class="box_frame cartMark">
                 <div class="card">
                     <div class="imgPos">
-                        <img :src="picture"/>
+                        <img :src="cardMsg.defaultPic"/>
                     </div>
                     <div style="margin:auto 0% auto 3%">
-                        <p class="titleCard">{{titleCard}}</p>
-                        <p class="cardNumber">{{desCard}}</p>
+                        <p class="titleCard">{{cardMsg.cardName}}</p>
+                        <p class="cardNumber">{{cardMsg.cardIntro}}</p>
                     </div>
                 </div>
             </div>
@@ -27,7 +23,7 @@
                                 label="*紧急联系人" 
                                 @blur="checkName" 
                                 :error-message="errMsg.name"  
-                                placeholder="请输入紧急联系人姓名" 
+                                placeholder="请输入姓名" 
                             />
                         </div>
                         <div class="formItem">
@@ -63,42 +59,42 @@
                     <div class="ruleForm">
                         <div class="formItem">
                              <van-field
-                                v-model="formData.sendWay"
+                                v-model="formData.sendType"
                                 is-link
                                 readonly
                                 label="*账单发送方式"
-                                @click="showSendWay = true"
+                                @click="showsendType = true"
                             />
-                            <van-popup v-model="showSendWay" round position="bottom">
+                            <van-popup v-model="showsendType" round position="bottom">
                                 <van-picker
                                     show-toolbar
-                                    :columns="optionsSendWay"
-                                    @cancel="showSendWay = false"
-                                    @confirm="onConfirmSendWay"
+                                    :columns="optionssendType"
+                                    @cancel="showsendType = false"
+                                    @confirm="onConfirmsendType"
                                 />
                             </van-popup>
                         </div>
                         <div class="formItem">
                              <van-field
-                                v-model="formData.sendAdress"
+                                v-model="formData.sendAddress"
                                 is-link
                                 readonly
                                 label="*卡函寄送地址"
-                                @click="showSendAdress = true"
+                                @click="showsendAddress = true"
                             />
-                            <van-popup v-model="showSendAdress" round position="bottom">
+                            <van-popup v-model="showsendAddress" round position="bottom">
                                 <van-picker
                                     show-toolbar
                                     :columns="optionsAdress"
-                                    @cancel="showSendAdress = false"
-                                    @confirm="onConfirmSendAdress"
+                                    @cancel="showsendAddress = false"
+                                    @confirm="onConfirmsendAddress"
                                 />
                             </van-popup>
                         </div>
                         <div class="formItem">
                             <van-cell center title="*是否需要刷卡密码？">
                                 <template #right-icon>
-                                    <van-switch v-model="checked" size="15" />
+                                    <van-switch v-model="checked" size="15"/>
                                 </template>
                             </van-cell>
                         </div>
@@ -119,11 +115,13 @@
 </template>
 <script>
 import pic from '@/assets/img/card3.png'
-import { Form } from 'vant';
+import { Form,Toast } from 'vant';
+import { callAppMethod } from '@/utils/commonFn';
 export default {
     name:'ApplyServiceInfo',
     components: {
         [Form.name]: Form,
+        [Toast.name]: Toast,
     },
     data(){
         return{
@@ -135,28 +133,29 @@ export default {
                 emergencyContact:'',//紧急联系人姓名
                 relationship:'',//紧急联系人关系
                 emergencyConPhone:'',//紧急联系人电话
-                sendWay:'',//发送方式
-                sendAdress:'',//发送地址
+                sendType:'',//发送方式
+                sendAddress:'',//发送地址
             },
             flag:{
                 emergencyContact:false,
                 relationship:false,
                 emergencyConPhone:false,
-                sendWay:false,
-                sendAdress:false,
+                sendType:false,
+                sendAddress:false,
             },
             errMsg: {
                 mobilePhone: '',
                 name:'',
             },
+            cardMsg:'',
             checked: true,
             btnAgree:true,
             thisStyle:'',
             showRelation:false,
-            showSendWay:false,
-            showSendAdress:false,
+            showsendType:false,
+            showsendAddress:false,
             optionsRelation:['父女','母女','兄弟姐妹'],
-            optionsSendWay:['E-mail','phone'],
+            optionssendType:['E-mail','phone'],
             optionsAdress:['北京市西二旗','外星球']
 
         }
@@ -210,69 +209,155 @@ export default {
             this.flag.relationship=true
         },
          //发送方式确定按钮
-        onConfirmSendWay(value){
-            this.formData.sendWay = value;
-            this.showSendWay = false;
-            this.flag.sendWay=true
+        onConfirmsendType(value){
+            this.formData.sendType = value;
+            this.showsendType = false;
+            this.flag.sendType=true
         },
         //邮寄地址确定按钮
-        onConfirmSendAdress(value){
-            this.formData.sendAdress = value;
-            this.showSendAdress = false;
-            this.flag.sendAdress=true
+        onConfirmsendAddress(value){
+            this.formData.sendAddress = value;
+            this.showsendAddress = false;
+            this.flag.sendAddress=true
         },
-        goBack(){
-             this.$router.go(-1)
-        },
+       //提交所有信息
+        sendData(data){
+            const timestamp = encodeURI(Date.parse(new Date()))
+            let dataGet;
+            let state;
+            let result = '';
+            this.requestAxios({
+                //url: "/mock/index.json",
+                url:'/api/cgi.do?txnId=2APO200013&dns=628&gtype=9&attest=-339418059&imei=124545',
+                params: {
+                    ecoType: data.ecoType,//经济类型
+                    companyName:data.companyName,//公司名称
+                    companyYears:data.companyYears,//公司年限
+                    comProAndCity:data.comProAndCity,//公司省市
+                    companyDetails:data.companyDetails,//公司地址
+                    companyNumber:data.companyNumber,//公司电话
+                    incomeYear:data.incomeYear,//年收入
+                    contactUrgent:data.contactUrgent,//紧急联系人
+                    relation:data.relation,//紧急联系人关系
+                    phone:data.phone,//ta的电话
+                    sendType:data.sendType,//账单发送方式
+                    sendAddress:data.sendAddress,//寄送地址
+                    passwordUse:data.passwordUse,//是否使用密码
+                    checkResult:'ll',//审核结果
+                    // applyTime:'2021-4-14',//申请时间
+                    idCard:data.idCard,//身份证号
+                    eduGrade:data.eduGrade,//教育程度
+                    marriage:data.marriage,//婚姻
+                    homeProAndCity:data.homeProAndCity,//家庭省市
+                    homeDetails:data.homeDetails,//家庭地址
+                    business:data.business,//行业性质
+                    busInfo:data.busInfo,//职业信息
+                    busGrade:data.busGrade,//职位或职级
+                    userId:123456,//用户id
+                    cardId:parseInt(this.$route.query.cardId),//信用卡id
+                    chineseName:data.chineseName,//中文姓名
+                    chinesePinyin:data.chinesePinyin,//中文拼音
+                    applyTime:timestamp,
+                },
+                method: "post",
+            })
+                .then((res) => {
+                    dataGet = JSON.parse(res.data);
+                    state = JSON.parse(res.data).stat;
+                    if (res.code === '00') {
+                        if (state === '00') {
+                            if (dataGet) {
+                                result = JSON.stringify(dataGet.result);
+                            }
+                        }
+                        this.$router.push({
+                            path: '/ApplyEnd',
+                            query: {
+                                data: result,
+                            },
+                        });
+                    } else if (res.code === '-501' || res.code === '-505') {
+                        // 登录超时，需要调用客户端方法，进行登录
+                        callAppMethod({
+                            callName: 'toLogin',
+                        });
+                    } else {
+                        this.$toast('信息异常！');
+                    }
+                })
+                .catch((err) => {
+                });
+            },
         //同意协议提交下一步，对每个输入信息去空格键
          submitMsg(){
             const objOld=this.formData
-            let allData={}
+            let allData={}//把所有信息都存在allData对象里，在allData里和后台对应字段，并把allData传给后台
             Object.keys(objOld).forEach(item =>{//对本页的输入信息做去空格键校验
                 let data=objOld[item]
                 data=data.toString()
                 data = data.split(" ").join("");
-                allData[item]=data
+                allData[item]=data//把当前页的信息填入allData
             })
             let basicData=JSON.parse(sessionStorage.getItem('basicData'))//把申请第一步的基本信息取出
             let otherData=JSON.parse(sessionStorage.getItem('otherData'))//把申请第二步的补充信息取出并转为对象
-            Object.keys(basicData).forEach(item =>{
-               allData[item]=basicData[item]
-            })
-            Object.keys(otherData).forEach(item =>{
-               allData[item]=otherData[item]
-            })//把所有信息都存在allData对象里，在allData里和后台对应字段，并把allData传给后台
-            this.$router.push({
-                name: 'ApplyEnd',
-                params:{
-                    id:this.$route.params.id
-                },
-            })
+            if(!basicData||!otherData){
+                this.$toast('有其他信息未填！');
+            }else{
+                Object.keys(basicData).forEach(item =>{//把基本信息放入allData
+                    allData[item]=basicData[item]
+                })
+                Object.keys(otherData).forEach(item =>{//把补充信息放入allData
+                    allData[item]=otherData[item]
+                })
+                //是否需要刷卡密码
+                if(this.checked){
+                    allData.passwordUse='1'
+                }else{
+                    allData.passwordUse='0'
+                }
+                if(allData.marriage){
+                    allData.marriage='1'
+                }else{
+                    allData.marriage='0'
+                }
+                console.log(allData)
+                Object.keys(allData).forEach(item =>{
+                allData[item]=encodeURI(allData[item])//解决url里传参乱码
+                })
+                this.sendData(allData)
+            }
         },
     },
-        watch:{
-            //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
-            //一个输入框校验正确，其对应的flag属性改为true，
-            //所有的输入框值校验正确，那么flag所有属性为true，此时可以点击同意按钮
-            flag:{
-                handler(newVal) {
-                    console.log(this.formData)
-                    let flag=true
-                    Object.keys(newVal).forEach(item => {
-                        if(newVal[item]==false){
-                            flag=false
-                        }
-                    })
-                    if(flag){
-                        this.thisStyle = "background: rgb(165 29 29 / 93%);"
-                        this.btnAgree = false
-                    }else{
-                        this.thisStyle = "background: #33333391"
-                        this.btnAgree = true
+    mounted(){
+        this.cardMsg=JSON.parse(this.$route.query.data)
+    },
+    watch:{
+        //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
+        //一个输入框校验正确，其对应的flag属性改为true，
+        //所有的输入框值校验正确，那么flag所有属性为true，此时可以点击同意按钮
+        flag:{
+            handler(newVal) {
+                console.log(this.formData)
+                let flag=true
+                Object.keys(newVal).forEach(item => {
+                    if(newVal[item]==false){
+                        flag=false
                     }
-                },
-                deep:true
-            }
+                })
+                if(flag){
+                    this.thisStyle = "background: rgb(165 29 29 / 93%);"
+                    this.btnAgree = false
+                }else{
+                    this.thisStyle = "background: #33333391"
+                    this.btnAgree = true
+                }
+            },
+            deep:true
+        }
+    },
+    beforeDestory() {
+        sessionStorage.removeItem('basicData')
+        sessionStorage.removeItem('otherData')
     }
 }
 </script>
@@ -280,8 +365,8 @@ export default {
 <style lang="less">
 
 .cartMark{
-    background: #999999;
-    padding: 3%;
+    background: #a6a6a6;
+    padding-left: 3%;
     position: fixed;
     width: 100%;
     z-index: 1000;
@@ -293,11 +378,15 @@ export default {
         }
         .imgPos{
             margin: auto 0;
+            width: 20%;
+        }
+        .cardNumber{
+            margin-top: .5rem;
         }
     }
 }
 .formBox{
-        padding: 4rem 3% 0 3%;
+        padding: 5rem 3% 0 3%;
         .van-cell-group{
             background-color:inherit
         }

@@ -7,7 +7,7 @@ import createDom from "@/utils/createDom"
 import { notNull } from "@/utils/commonFn"
 
 export const req = axios.create({
-    baseURL: "",
+    baseURL: '',
     timeout: 15000
 })
 export const request = ({ url = "", data = {}, params = {}, method = "post" } = {}) => {

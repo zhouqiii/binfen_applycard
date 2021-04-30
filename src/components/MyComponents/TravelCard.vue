@@ -9,12 +9,12 @@
              <div class="box_frame-row">
                 <div class="box_frame_next">
                     <div v-for="(image, index) in travelCard" :key="index" class="nextcard">
-                         <div style="margin:.5em .5em;text-align:center">
-                            <img :src="image.imgUrl"/>
+                         <div style="margin:.5em auto;width:60%">
+                            <img :src="image.defaultPic"/>
                         </div>
-                        <div style="margin:2% 0% auto 3%">
-                            <p class="titleCard">{{image.title}}</p>
-                            <p class="cardNumber">{{image.des}}</p>
+                        <div style="margin:2% 0% auto 3%;">
+                            <p class="titleCard">{{image.cardName}}</p>
+                            <p class="cardNumber">{{image.cardIntro}}</p>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@ export default {
     justify-content: space-between;
     .nextcard{
         padding-bottom:.5em;
-        border: 1px solid #333333;
+        border: 1px solid #83757569;
         width: 48%;
         border-radius: 5%;
         .titleCard{

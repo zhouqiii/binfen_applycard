@@ -1,23 +1,20 @@
 <template>
     <div class="home">
         <common-header :title="title">
-            <template v-slot:back>
-                <svg-icon iconClass="fanhuijiantou" @click="goBack"></svg-icon>
-            </template>
         </common-header>
         <div>
             <div class="box_frame cartMark">
                 <div class="card">
                     <div class="imgPos">
-                        <img :src="picture"/>
+                        <img :src="cardMsg.defaultPic"/>
                     </div>
                     <div style="margin:auto 0% auto 3%">
-                        <p class="titleCard">{{titleCard}}</p>
-                        <p class="cardNumber">{{desCard}}</p>
+                        <p class="titleCard">{{cardMsg.cardName}}</p>
+                        <p class="cardNumber">{{cardMsg.cardIntro}}</p>
                     </div>
                 </div>
             </div>
-            <van-form class="formBox">
+            <van-form class="formBox padBox">
                 <div>
                     <!--补充其他信息-->
                     <div><p class="titleCard">补充其他信息</p></div>
@@ -34,41 +31,41 @@
                         </div>
                         <div class="formItem">
                             <van-field
-                                v-model="formData.marry"
+                                v-model="formData.marriage"
                                 is-link
                                 readonly
                                 label="*婚姻状况"
-                                @click="showPickerMarry = true"
+                                @click="showPickermarriage = true"
                             />
-                            <van-popup v-model="showPickerMarry" round position="bottom">
+                            <van-popup v-model="showPickermarriage" round position="bottom">
                             <van-picker
                                 show-toolbar
-                                :columns="marrySelects"
-                                @cancel="showPickerMarry = false"
-                                @confirm="onConfirmMarry"
+                                :columns="marriageSelects"
+                                @cancel="showPickermarriage = false"
+                                @confirm="onConfirmmarriage"
                             />
                             </van-popup>
                         </div>
                         <div class="formItem">
                             <van-field
-                                v-model="formData.study"
+                                v-model="formData.eduGrade"
                                 is-link
                                 readonly
                                 label="*教育程度"
-                                @click="showPickerStudy = true"
+                                @click="showPickereduGrade = true"
                             />
-                            <van-popup v-model="showPickerStudy" round position="bottom">
+                            <van-popup v-model="showPickereduGrade" round position="bottom">
                             <van-picker
                                 show-toolbar
-                                :columns="studySelects"
-                                @cancel="showPickerStudy = false"
-                                @confirm="onConfirmStudy"
+                                :columns="eduGradeSelects"
+                                @cancel="showPickereduGrade = false"
+                                @confirm="onConfirmeduGrade"
                             />
                             </van-popup>
                         </div>
                         <div class="formItem">
                            <van-field
-                                v-model="formData.fieldValue"
+                                v-model="formData.homeProAndCity"
                                 is-link
                                 readonly
                                 label="*家庭省市"
@@ -84,21 +81,13 @@
                             </van-popup>
                         </div>
                         <div>
-                            <van-field v-model="formData.message" 
+                            <van-field v-model="formData.homeDetails" 
                                 label="*家庭地址" 
                                 placeholder="请输入家庭住址" 
                                 @blur="checkAdress" 
                                 :error-message="errMsg.adress"     
                             />
-                            <!-- <van-field class="textAreaDiv"
-                                v-model="formData.message"
-                                rows="3"
-                                label="*家庭地址"
-                                type="textarea"
-                                placeholder="请输入家庭住址"
-                                @blur="checkAdress" 
-                                :error-message="errMsg.adress"   
-                            /> -->
+                          
                         </div>
                     </div>
                 </div>
@@ -108,7 +97,7 @@
                     <div class="ruleForm">
                         <div class="formItem">
                             <van-field
-                                v-model="formData.enterpriseType"
+                                v-model="formData.business"
                                 is-link
                                 readonly
                                 label="*行业性质"
@@ -125,7 +114,7 @@
                         </div>
                          <div class="formItem">
                             <van-field
-                                v-model="formData.enterpriseMsg"
+                                v-model="formData.busInfo"
                                 is-link
                                 readonly
                                 label="*职业信息"
@@ -142,24 +131,24 @@
                         </div>
                          <div class="formItem">
                             <van-field
-                                v-model="formData.ocupation"
+                                v-model="formData.busGrade"
                                 is-link
                                 readonly
                                 label="*职位或职级"
-                                @click="showPickerOcupation = true"
+                                @click="showPickerbusGrade = true"
                             />
-                            <van-popup v-model="showPickerOcupation" round position="bottom">
+                            <van-popup v-model="showPickerbusGrade" round position="bottom">
                             <van-picker
                                 show-toolbar
-                                :columns="ocupationSelects"
-                                @cancel="showPickerOcupation = false"
-                                @confirm="onConfirmOcupation"
+                                :columns="busGradeSelects"
+                                @cancel="showPickerbusGrade = false"
+                                @confirm="onConfirmbusGrade"
                             />
                             </van-popup>
                         </div>
                          <div class="formItem">
                             <van-field
-                                v-model="formData.economicType"
+                                v-model="formData.ecoType"
                                 is-link
                                 readonly
                                 label="*经济类型"
@@ -184,7 +173,7 @@
                         </div>
                         <div class="formItem">
                            <van-field
-                                v-model="formData.companyAdr"
+                                v-model="formData.comProAndCity"
                                 is-link
                                 readonly
                                 label="*单位省市"
@@ -200,7 +189,7 @@
                             </van-popup>
                         </div>
                         <div class="formItem">
-                            <van-field v-model="formData.detailComAdr" 
+                            <van-field v-model="formData.companyDetails" 
                                 label="*详细地址" 
                                 placeholder="请输入公司详细地址"
                                  @blur="checkComAdress" 
@@ -208,7 +197,7 @@
                             />
                         </div>
                          <div class="formItem">
-                            <van-field v-model="formData.companyNum" 
+                            <van-field v-model="formData.companyNumber" 
                                 label="*公司电话"
                                 placeholder="请输入公司电话"
                                 @blur="checkComPhone" 
@@ -217,7 +206,7 @@
                         </div>
                         <div class="formItem">
                            <van-field
-                                v-model="formData.companyAge"
+                                v-model="formData.companyYears"
                                 is-link
                                 readonly
                                 label="*公司年限"
@@ -234,18 +223,18 @@
                         </div>
                         <div class="formItem">
                            <van-field
-                                v-model="formData.income"
+                                v-model="formData.incomeYear"
                                 is-link
                                 readonly
                                 label="年收入"
-                                @click="showIncome = true"
+                                @click="showincomeYear = true"
                             />
-                            <van-popup v-model="showIncome" round position="bottom">
+                            <van-popup v-model="showincomeYear" round position="bottom">
                                 <van-picker
                                     show-toolbar
-                                    :columns="optionsIncome"
-                                    @cancel="showIncome = false"
-                                    @confirm="onConfirmIncome"
+                                    :columns="optionsincomeYear"
+                                    @cancel="showincomeYear = false"
+                                    @confirm="onConfirmincomeYear"
                                 />
                             </van-popup>
                         </div>
@@ -256,7 +245,7 @@
                     <div><p class="titleCard">紧急联系人</p></div>
                     <div class="ruleForm">
                         <div class="formItem">
-                            <van-field v-model="formData.emergencyContact" 
+                            <van-field v-model="formData.contactUrgent" 
                                 label="*紧急联系人" 
                                 placeholder="请输入紧急联系人姓名" 
                                 @blur="checkContact" 
@@ -265,7 +254,7 @@
                         </div>
                         <div class="formItem">
                              <van-field
-                                v-model="formData.relationship"
+                                v-model="formData.relation"
                                 is-link
                                 readonly
                                 label="*与你的关系"
@@ -281,7 +270,7 @@
                             </van-popup>
                         </div>
                         <div class="formItem">
-                            <van-field v-model="formData.emergencyConPhone" 
+                            <van-field v-model="formData.phone" 
                                 label="*ta的电话" 
                                 placeholder="请输入紧急联系人电话" 
                                 @blur="checkContactPhone" 
@@ -314,43 +303,44 @@ export default {
         return{
             formData:{
                 date:'',//1
-                marry: '',     
-                study:'',
-                fieldValue: '',
-                message:'',
-                enterpriseType:'',
-                relationship:'',
-                income:'',
-                emergencyConPhone:'',
-                emergencyContact:'',
+                marriage: '',     
+                eduGrade:'',
+                homeProAndCity: '',
+                homeDetails:'',
+                business:'',
+                relation:'',
+                incomeYear:'',
+                phone:'',
+                contactUrgent:'',
                 companyName:'',
-                companyAdr:'',
-                detailComAdr:'',
-                companyNum:'',
-                companyAge:'',
-                enterpriseMsg:'',
-                ocupation:'',
-                economicType:'',
+                comProAndCity:'',
+                companyDetails:'',
+                companyNumber:'',
+                companyYears:'',
+                busInfo:'',
+                busGrade:'',
+                ecoType:'',
             },
+             cardMsg:'',
              flag:{
-                date:false,//身份证
-                marry: false,   //婚姻  
-                study:false,//教育
-                fieldValue: false,//家庭省市
-                message:false,//家庭地址
-                enterpriseType:false,//行业性质
-                relationship:false,//紧急与你的关系
-                income:false,//收入
-                emergencyConPhone:false,//紧急联系方式
-                emergencyContact:false,//紧急联系人
+                date:false,//身份证N
+                marriage: false,   //婚姻  
+                eduGrade:false,//教育
+                homeProAndCity: false,//家庭省市
+                homeDetails:false,//家庭地址
+                business:false,//行业性质
+                relation:false,//紧急与你的关系
+                incomeYear:false,//收入
+                phone:false,//紧急联系方式
+                contactUrgent:false,//紧急联系人
                 companyName:false,//公司名称
-                companyAdr:false,//公司地址
-                detailComAdr:false,//详细地址
-                companyNum:false,//公司电话
-                companyAge:false,//公司年限
-                enterpriseMsg:false,//职业信息
-                ocupation:false,//职位
-                economicType:false,//收入类型
+                comProAndCity:false,//公司省市
+                companyDetails:false,//详细地址
+                companyNumber:false,//公司电话
+                companyYears:false,//公司年限N
+                busInfo:false,//职业信息
+                busGrade:false,//职位
+                ecoType:false,//收入类型N
             },
             errMsg:{
                 adress:'',
@@ -369,24 +359,24 @@ export default {
             picture:pic,
             titleCard:'中银数字信用卡白金卡',
             desCard:'副标题，精简文案，突出卖点',
-            showPickerMarry: false,
-            showPickerStudy:false,
+            showPickermarriage: false,
+            showPickereduGrade:false,
             showPickerType:false,
             showPickerMsg:false,
-            showPickerOcupation:false,
+            showPickerbusGrade:false,
             showPickerEco:false,
             showComCity:false,
             showComAge:false,
-            showIncome:false,
+            showincomeYear:false,
             showRelation:false,
-            marrySelects: ['未婚','已婚'],
-            studySelects:['专科','本科','硕士','博士'],
+            marriageSelects: ['未婚','已婚'],
+            eduGradeSelects:['专科','本科','硕士','博士'],
             typeSelects:['制造业','服务业'],
             msgSelects:['互联网','电子游戏','漫画家','作家'],
-            ocupationSelects:['经理','职员'],
+            busGradeSelects:['经理','职员'],
             ecoSelects:['年薪','月薪'],
             optionsComAge:['30年','50年','70年'],
-            optionsIncome:['30w','50w','100w'],
+            optionsincomeYear:['30w','50w','100w'],
             optionsRelation:['父女','母女','兄弟姐妹'],
             showCity: false,
             cascaderValue: '',
@@ -409,71 +399,71 @@ export default {
 
         },
         //婚姻状况确定按钮
-        onConfirmMarry(value) {
-            this.formData.marry = value;
-            this.showPickerMarry = false;
-            this.flag.marry=true
+        onConfirmmarriage(value) {
+            this.formData.marriage = value;
+            this.showPickermarriage = false;
+            this.flag.marriage=true
         },
         //学历确定按钮
-         onConfirmStudy(value) {
-            this.formData.study = value;
-            this.showPickerStudy = false;
-            this.flag.study=true
+         onConfirmeduGrade(value) {
+            this.formData.eduGrade = value;
+            this.showPickereduGrade = false;
+            this.flag.eduGrade=true
         },
         //行业性质确定按钮
          onConfirmType(value) {
-            this.formData.enterpriseType = value;
+            this.formData.business = value;
             this.showPickerType = false;
-            this.flag.enterpriseType=true
+            this.flag.business=true
         },
         //职业信息确定按钮
         onConfirmMsg(value) {
-            this.formData.enterpriseMsg = value;
+            this.formData.busInfo = value;
             this.showPickerMsg = false;
-            this.flag.enterpriseMsg=true
+            this.flag.busInfo=true
         },
         //职位确定按钮
-        onConfirmOcupation(value){
-            this.formData.ocupation = value;
-            this.showPickerOcupation = false;
-            this.flag.ocupation=true
+        onConfirmbusGrade(value){
+            this.formData.busGrade = value;
+            this.showPickerbusGrade = false;
+            this.flag.busGrade=true
         },
         //经济类型确定按钮
         onConfirmEco(value){
-            this.formData.economicType = value;
+            this.formData.ecoType = value;
             this.showPickerEco = false;
-            this.flag.economicType=true
+            this.flag.ecoType=true
         },
         //公司省市确定按钮
         onConfirmCompany(value){
-            this.formData.companyAdr = value[0]+value[1];//省市格式化为北京市东城区 安徽省淮北市的格式
+            this.formData.comProAndCity = value[0]+value[1];//省市格式化为北京市东城区 安徽省淮北市的格式
             this.showComCity = false;
-            this.flag.companyAdr=true
+            this.flag.comProAndCity=true
         },
         //公司年限确定按钮
         onConfirmComAge(value){
-            this.formData.companyAge = value;
+            this.formData.companyYears = value;
             this.showComAge = false;
-            this.flag.companyAge=true
+            this.flag.companyYears=true
         },
         //收入确定按钮
-        onConfirmIncome(value){
-            this.formData.income = value;
-            this.showIncome = false;
-            this.flag.income=true
+        onConfirmincomeYear(value){
+            this.formData.incomeYear = value;
+            this.showincomeYear = false;
+            this.flag.incomeYear=true
         },
         //与紧急联系人的关系确定按钮
         onConfirmRelation(value){
-            this.formData.relationship = value;
+            this.formData.relation = value;
             this.showRelation = false;
-            this.flag.relationship=true
+            this.flag.relation=true
         },
         //家庭省市确定按钮
         onFinish(value) {
             this.showCity = false;
             // console.log(value)
-            this.formData.fieldValue = value[0]+value[1];//省市格式化为北京市东城区 安徽省淮北市的格式
-            this.flag.fieldValue=true
+            this.formData.homeProAndCity = value[0]+value[1];//省市格式化为北京市东城区 安徽省淮北市的格式
+            this.flag.homeProAndCity=true
         },
         //公司名称校验
         checkComA(){
@@ -490,82 +480,81 @@ export default {
         },
         //家庭住址
         checkAdress(){
-             if (!this.formData.message) {
+             if (!this.formData.homeDetails) {
                 this.errMsg.adress = '请填写地址！'
-                this.flag.message=false
+                this.flag.homeDetails=false
                 return false
             }
             else {
                 this.errMsg.adress = ''
-                this.flag.message=true
+                this.flag.homeDetails=true
                 return true
             }
         },
         //公司地址校验
          checkComAdress(){
-             if (!this.formData.detailComAdr) {
+             if (!this.formData.companyDetails) {
                 this.errMsg.comAdress = '请填写地址！'
-                this.flag.detailComAdr=false
+                this.flag.companyDetails=false
                 return false
             }
             else {
                 this.errMsg.comAdress = ''
-                 this.flag.detailComAdr=true
+                 this.flag.companyDetails=true
                 return true
             }
         },
         //公司电话校验
         checkComPhone(){
             let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
-            if (!this.formData.companyNum) {
+            if (!this.formData.companyNumber) {
                 this.errMsg.comMobilePhone = '请填写电话！'
-                 this.flag.companyNum=false
+                 this.flag.companyNumber=false
                 return false
-            } else if (!re.test(this.formData.companyNum)) {
+            } else if (!re.test(this.formData.companyNumber)) {
                 this.errMsg.comMobilePhone = '格式错误！'
-                this.flag.companyNum=false
+                this.flag.companyNumber=false
                 return false
             }
             else {
                 this.errMsg.comMobilePhone = ' '
-                this.flag.companyNum=true
+                this.flag.companyNumber=true
                 return true
             }
         },
         //紧急联系人姓名失焦校验
         checkContact(){
              const chinese = new RegExp("[\u4E00-\u9FA5]+");
-              if (!this.formData.emergencyContact) {
+              if (!this.formData.contactUrgent) {
                 this.errMsg.name = '请填写姓名！'
-                this.flag.emergencyContact=false
+                this.flag.contactUrgent=false
                 return false
-            } else if (!chinese.test(this.formData.emergencyContact)) {//判断字符串是否为汉字
+            } else if (!chinese.test(this.formData.contactUrgent)) {//判断字符串是否为汉字
                 this.errMsg.name = '格式错误！'
-                this.flag.emergencyContact=false
+                this.flag.contactUrgent=false
                 return false
             }
             else {
                 this.errMsg.name = ' '
-                this.flag.emergencyContact=true
+                this.flag.contactUrgent=true
                 return true
             }
-            
         },
         //紧急联系人电话失焦校验
         checkContactPhone(){
             let re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
-            if (!this.formData.emergencyConPhone) {
+            if (!this.formData.phone) {
                 this.errMsg.mobilePhone = '请填写电话！'
-                this.flag.emergencyConPhone=false
+                this.flag.phone=false
                 return false
-            } else if (!re.test(this.formData.emergencyConPhone)) {
+            } else if (!re.test(this.formData.phone)) {
                 this.errMsg.mobilePhone = '格式错误！'
-                 this.flag.emergencyConPhone=false
+                 this.flag.phone=false
                 return false
             }
             else {
                 this.errMsg.mobilePhone = ' '
-                this.flag.emergencyConPhone=true
+                this.flag.phone=true
                 return true
             }
         },
@@ -582,28 +571,35 @@ export default {
             sessionStorage.setItem('otherData',JSON.stringify(objNew))//转成字符串缓存
             this.$router.push({
                 name: 'ApplyServiceInfo',
-                params:{
-                    id:this.$route.params.id
+                query:{
+                    cardId:this.$route.query.cardId,
+                    data:this.$route.query.data
                 },
             })
         },
          getHomeData: function() {
-            axios.get('/mock/city.json').then(this.getHomeDataSucc)
+            this.requestAxios({
+                url:'/mock/city.json',
+                method: "get",
+            })
+            .then((res) => {
+                this.getHomeDataSucc(res)
+            })
+            .catch((err) => {
+            });
         },
         //数据赋值
         getHomeDataSucc: function(res) {
             res = res.data
-            if(res.ret&&res.data) {
-                this.options = res.data.city
-                this.optionsComCity = res.data.city
-        }
-    },
-        goBack(){
-            this.$router.go(-1)
-        }
+            if(res.city){
+                this.options = res.city
+                this.optionsComCity = res.city
+            }
+        },
     },
     mounted () {
-            this.getHomeData()
+        this.cardMsg=JSON.parse(this.$route.query.data)
+        this.getHomeData()
         },
     watch:{
         //监听flag变化，这里flag里的每一个属性对应一个输入框的校验
@@ -634,8 +630,8 @@ export default {
 <style lang="less">
 .home{
     .cartMark{
-        background: #999999;
-        padding: 3%;
+        background: #a6a6a6;
+        padding-left: 3%;
         position: fixed;
         width: 100%;
         z-index: 1000;
@@ -647,11 +643,15 @@ export default {
             }
             .imgPos{
                 margin: auto 0;
+                width: 20%;
+            }
+            .cardNumber{
+                margin-top: .5rem;
             }
         }
     }
-    .formBox{
-        padding: 4rem 3% 0 3%;
+    .padBox{
+        padding: 5rem 3% 0 3%;
         .van-field__control{
             text-align: initial;
         }
@@ -663,7 +663,7 @@ export default {
             flex-direction: row;
             justify-content: space-between;
             .van-field__body{
-                width: 65%;
+                width: 70%;
                 textarea{
                     height: 4.5em;
                     margin-top:2.2em;

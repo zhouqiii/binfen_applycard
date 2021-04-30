@@ -1,15 +1,17 @@
 <template>
   <div class="commonHeader">
     <div class="main">
-      <div class="left">
-        <slot name="back">
+      <div class="left" @click="goBack">
+        <slot name="back" >
+          <img
+            src="../assets/icons/icon_back@2x.png"
+            alt="图片加载失败"
+            class="back back_btn"
+          />
         </slot>
       </div>
       <div class="middle title">{{ title }}</div>
       <div class="right">
-        <!-- <slot name="icon1"></slot>
-        <slot name="icon2"></slot> -->
-        <!-- 用户自定义 -->
         <slot name="custom"></slot>
       </div>
     </div>
@@ -19,6 +21,8 @@
  
 <script>
 import { callAppMethod } from "@/utils/commonFn";
+import DialogMessage from '../components/MyComponents/DialogMessage.vue'
+import createDom from '../utils/createDom.js'
 export default {
   name: "commonHeader",
   data() {
@@ -37,14 +41,34 @@ export default {
       type: String,
       default: "1",
     },
+    ifDialog:{
+      type:String,
+      default:'-1'
+    }
   },
   methods: {
-    back() {
-      this.type === "1" && this.$router.go(-1);
-      if (this.type === "0") {
-        callAppMethod({
-          callName: "lastGoBack",
-        });
+    goBack() {
+      if(this.type==='1' && this.ifDialog==='1'){//因为申请第一步的返回按钮有一个弹框，所以这里用ifDialog==1是弹框
+         createDom(
+                DialogMessage,
+                {},
+                {
+                    title: '不要走哦，就差一点就申请好了',
+                    content: '1、先消费后付款，可以分期可以提现金</br>2、生成良好的个人信用记录</br>3、累计积分，可以免费兑换礼物哦',
+                    classAno:'',//绑定一个动态class，修改弹框的标题居中或者靠左
+                    show:true
+                }
+            );
+      }else{
+        if(this.type==='1'){
+          this.$router.go(-1);
+        }else if(this.type==='0'){
+            callAppMethod({
+              callName: "lastGoBack",
+            });
+        }else{
+          return 
+        }
       }
     },
   },
